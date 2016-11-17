@@ -15,7 +15,7 @@
 	<session-config>
 	  <session-timeout>120</session-timeout>
 	</session-config>
-	<filter>
+	<!-- <filter>
 		<filter-name>jfinal</filter-name>
 		<filter-class>com.jfinal.core.JFinalFilter</filter-class>
 		<init-param>
@@ -26,7 +26,7 @@
 	<filter-mapping>
 		<filter-name>jfinal</filter-name>
 		<url-pattern>/*</url-pattern>
-	</filter-mapping>
+	</filter-mapping> -->
 	<servlet>
 		<servlet-name>WeChatMain</servlet-name>
 		<servlet-class>jinsoftms.service.WeChatMain</servlet-class>
@@ -55,4 +55,17 @@
 		<servlet-name>WeChatMain</servlet-name>
 		<url-pattern>/main</url-pattern>
 	</servlet-mapping>
+  	<filter>
+        <filter-name>Set Character Encoding</filter-name>
+        <filter-class>filters.SetCharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+  	</filter>
+  	<filter-mapping>
+        <filter-name>Set Character Encoding</filter-name>
+        <url-pattern>/*</url-pattern>
+  	</filter-mapping>
+	
 </web-app>

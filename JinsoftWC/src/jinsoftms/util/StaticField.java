@@ -3,7 +3,19 @@ package jinsoftms.util;
 import java.math.BigDecimal;
 
 public class StaticField {
-
+	//服务器域名
+	public static final String HTTP_URL="http://8e5a5ee6.ngrok.io/";
+	//SSL服务器域名
+	public static final String HTTPS_URL="https://www.jingsoft.com.cn/";
+	
+	
+//	//服务器域名
+//	public static final String HTTP_URL="http://jinsoft.vicp.net/";
+//	//SSL服务器域名
+//	public static final String HTTPS_URL="https://jinsoft.vicp.net/";
+	//项目名称
+	public static final String PROJECTNAME="JinsoftWC";
+	
 	public static final String versionName = "version";
 	public static final String addDateTimeName = "AddTime";
 	public static final String addWhoName = "AddWho";

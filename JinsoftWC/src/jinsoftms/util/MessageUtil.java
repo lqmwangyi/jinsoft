@@ -200,8 +200,8 @@ public class MessageUtil {
 				+ "经营：电子及电子计算机技术服务，计算机软件开发，电子计算机网络工程。"
 				+ "拥有31个员工，其中管理人员3人，行政人员3人，技术设计人员3人，软件开发人员4人，高级网络技术人员2人，销售人员8人，维护人员6人，网络工程技术人员2人"
 				+ "主营方向：信息管理系统的研发，集成信息收集、数据管理与统计分析平台、乃至相关控制系统的研发，网络技术的尖端应用以及拓展。");
-		news.setPicUrl("http://jinsoft.vicp.net/jinsoftwechat/images/20120711164307937.gif");
-		news.setUrl("www.jingsoft.com/AboutUs.aspx?id=4");
+		news.setPicUrl(StaticField.HTTP_URL + StaticField.PROJECTNAME + "/images/20120711164307937.gif");
+		news.setUrl("www.jingsoft.com.cn/AboutUs.aspx?id=4");
 		newsList.add(news);
 		
 		News newstel = new News();
@@ -212,11 +212,11 @@ public class MessageUtil {
 				+ "传真:86-20-83492095"
 				+ "手机：13751842821"
 				+ "邮箱：jinsoft@126.com"
-				+ "网址：http://www.jingsoft.com"
+				+ "网址：http://www.jingsoft.com.cn"
 				+ "详细地址：广东省广州市越秀区淘金路54号世贸花园大厦20/F"
 				+ "邮政编码：510095");
-		newstel.setPicUrl("http://jinsoft.vicp.net/jinsoftwechat/images/20120711165254578.gif");
-		newstel.setUrl("www.jingsoft.com/AboutUs.aspx?id=6");
+		newstel.setPicUrl(StaticField.HTTP_URL + StaticField.PROJECTNAME + "/images/20120711165254578.gif");
+		newstel.setUrl("www.jingsoft.com.cn/AboutUs.aspx?id=6");
 		newsList.add(newstel);
 		
 		NewsMessage newsMessage = new NewsMessage();
@@ -279,8 +279,8 @@ public class MessageUtil {
 		music.setThumbMediaId("0njvsw_-mbRdOsj78SLcy5J6NSehhco5iBD_4BvUtlXoKTZNFFYDrLvLOWkpDK_4");
 		music.setTitle("夏洛特烦恼");
 		music.setDescription("电影《夏洛特烦恼》同名主题曲《夏洛特烦恼》");
-		music.setMusicUrl("http://jinsoft.vicp.net/jinsoftwechat/music/xialoutedefannao.mp3");
-		music.setHQMusicUrl("http://jinsoft.vicp.net/jinsoftwechat/music/xialoutedefannao.mp3");
+		music.setMusicUrl(StaticField.HTTP_URL + StaticField.PROJECTNAME + "/music/xialoutedefannao.mp3");
+		music.setHQMusicUrl(StaticField.HTTP_URL + StaticField.PROJECTNAME + "/music/xialoutedefannao.mp3");
 		
 		MusicMessage musicMessage = new MusicMessage();
 		musicMessage.setFromUserName(toUserName);

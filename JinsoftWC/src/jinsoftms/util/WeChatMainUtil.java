@@ -28,6 +28,7 @@ import jinsoftms.database.wechat.menu.Button;
 import jinsoftms.database.wechat.menu.ClickButton;
 import jinsoftms.database.wechat.menu.Menu;
 import jinsoftms.database.wechat.menu.ViewButton;
+import jinsoftms.thread.AccessTokenThread;
 
 
 public class WeChatMainUtil {
@@ -220,8 +221,10 @@ public class WeChatMainUtil {
 	/**
 	 * 菜单组装
 	 * @return
+	 * @throws IOException 
+	 * @throws ParseException 
 	 */
-	public static Menu initMenu(){
+	public static Menu initMenu() throws ParseException, IOException{
 		Menu menu = new Menu();
 //		ClickButton buildingDynamicClickButton = new ClickButton();
 //		buildingDynamicClickButton.setName("楼盘动态");
@@ -255,7 +258,7 @@ public class WeChatMainUtil {
 		ViewButton roomViewButton = new ViewButton();
 		roomViewButton.setName("房产信息");
 		roomViewButton.setType("view");
-		roomViewButton.setUrl("http://jinsoft.vicp.net/JinsoftWC/mobile/repair/sevice.html");
+		roomViewButton.setUrl(StaticField.HTTP_URL + StaticField.PROJECTNAME + "/mobile/repair/sevice.html");
 		
 		ClickButton  scancodeClickButton = new ClickButton();
 		scancodeClickButton.setName("扫码事件");
@@ -274,13 +277,13 @@ public class WeChatMainUtil {
 		ViewButton bindUserServiceViewButton = new ViewButton();
 		bindUserServiceViewButton.setName("认证页面");
 		bindUserServiceViewButton.setType("view");
-		bindUserServiceViewButton.setUrl(BIND_USER_URL);
+		bindUserServiceViewButton.setUrl(bindUserCode());
 		
 		
 		ViewButton repairServiceViewButton = new ViewButton();
 		repairServiceViewButton.setName("维修服务");
 		repairServiceViewButton.setType("view");
-		repairServiceViewButton.setUrl("http://jinsoft.vicp.net/JinsoftWC/mobile/repair/new.html");
+		repairServiceViewButton.setUrl(StaticField.HTTP_URL + StaticField.PROJECTNAME + "/mobile/repair/new.html");
 		
 		ClickButton accountPayClickButton = new ClickButton();
 		accountPayClickButton.setName("欠费缴纳");
@@ -295,7 +298,7 @@ public class WeChatMainUtil {
 		ViewButton loginServiceViewButton = new ViewButton();
 		loginServiceViewButton.setName("个人主界面");
 		loginServiceViewButton.setType("view");
-		loginServiceViewButton.setUrl("http://jinsoft.vicp.net/JinsoftWC/person.html");
+		loginServiceViewButton.setUrl(StaticField.HTTP_URL + StaticField.PROJECTNAME + "/person.html");
 		
 		Button clientServiceButton = new Button();
 		clientServiceButton.setName("客户服务");
@@ -306,8 +309,10 @@ public class WeChatMainUtil {
 	}
 	
 	
-	public static String bindUserCode(String access_token) throws ParseException,IOException{
-		String url = BIND_USER_URL.replace("APPID", "wx7d9306bba80f8750").replace("REDIRECT_URI", "https://jinsoft.vicp.net/JinsoftWC/reg.jsp");
+	public static String bindUserCode() throws ParseException,IOException{
+		String url = BIND_USER_URL.replace("APPID", AccessTokenThread.APPID).
+				replace("REDIRECT_URI", StaticField.HTTPS_URL + StaticField.PROJECTNAME + "/reg.jsp")
+				.replace("SCOPE", "snsapi_userinfo").replace("STATE", "123");
 		return url;
 	}
 	

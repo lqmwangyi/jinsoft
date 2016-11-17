@@ -3,7 +3,7 @@
 <html xml:lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>认证界面</title>
 <script type="text/javascript" src="js/jquery-1.7.1.min.js"></script>
 <script language="javascript">
 function get_mobile_code(){

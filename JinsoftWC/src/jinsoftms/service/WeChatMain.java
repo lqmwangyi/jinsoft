@@ -108,7 +108,7 @@ public class WeChatMain extends HttpServlet {
 					message = MessageUtil.initMusicMessage(fromUserName, toUserName);
 				}else if("?".equals(content) || "？".equals(content)){
 					message = MessageUtil.initText(fromUserName, toUserName, MessageUtil.menuText());
-				}else if("创建菜单".equals(content) || "CreateMenu".equalsIgnoreCase(content)){
+				}else if("创建菜单".equals(content) || "createmenu".equalsIgnoreCase(content)){
 					String menu = JSONObject.fromObject(WeChatMainUtil.initMenu()).toString();
 					String token = AccessTokenThread.accessToken.getAccess_token();
 					int result = WeChatMainUtil.createMenu(token, menu);
@@ -119,6 +119,22 @@ public class WeChatMain extends HttpServlet {
 						msg = "错误码：" + result;
 					}
 					message = MessageUtil.initText(fromUserName, toUserName, msg);
+				}else if("删除菜单".equals(content) || "deletemenu".equalsIgnoreCase(content)){
+					String token = AccessTokenThread.accessToken.getAccess_token();
+					int result = WeChatMainUtil.deleteMenu(token);
+					String msg = "";
+					if(result == 0){
+						msg = "删除菜单成功";
+					}else{
+						msg = "错误码：" + result;
+					}
+					message = MessageUtil.initText(fromUserName, toUserName, msg);
+				}else  if("查询菜单".equals(content) || "querymenu".equalsIgnoreCase(content)){
+					String token = AccessTokenThread.accessToken.getAccess_token();
+					JSONObject jsonObject = WeChatMainUtil.queryMenu(token);
+					message = MessageUtil.initText(fromUserName, toUserName, jsonObject.toString());
+				}else{
+					message = MessageUtil.initText(fromUserName, toUserName, "没找到需要的指令");
 				}
 				
 //				TextMessage text = new TextMessage();
