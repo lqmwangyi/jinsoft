@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="../favicon.ico" type="image/x-icon" /> 
+<link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />     
+<link rel="stylesheet" href="css/cover.css" />
+<link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css">
+<script src="js/jquery-1.7.1.min.js"></script>
+<script src="js/jquery.mobile-1.4.5.min.js"></script>
+</head>
+<body>
+
+<script type="text/javascript">
+/* $.extend({
+	log:function(message){
+		console.log(message +new Date());
+	}
+});
+$.log("现在时刻："); */
+
+/* $.getJSON("https://api.weixin.qq.com/cgi-bin/menu/get?access_token=ACCESS_TOKEN", function(data){
+  $.each(data.items, function(i,item){
+    $("<img/>").attr("src", item.media.m).appendTo("#images");
+    if ( i == 3 ) return false;
+  });
+}); */
+
+var xmlHttp;
+var runLogin=1
+function backey(e){
+	if(e.keyCode==8){
+        var elem = e.srcElement;
+        if(elem.type != "text" && elem.type != "textarea"){
+             e.keyCode = 0;   
+             e.returnValue = false;
+        }
+    }	  
+}
+function createxmlHttpRequest()
+{
+    if(window.ActiveXObject)
+        xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+    else if(window.XMLHttpRequest)
+        xmlHttp = new XMLHttpRequest();
+}
+function createQueryString()
+{
+    var userPhone = document.getElementById("userPhone").value;
+    var queryString = "userPhone="+userPhone;
+    return queryString;
+}	    
+function doRequestUsingPost()
+{
+    createxmlHttpRequest();
+    var url ="/jinsoftwechat/system.login";
+    var queryString = createQueryString();
+    xmlHttp.open("POST",url);
+    xmlHttp.onreadystatechange = handleStateChange;
+    xmlHttp.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+    xmlHttp.send(queryString);
+}        
+function handleStateChange()
+{
+    if(xmlHttp.readyState==4)
+    {
+    	if (xmlHttp.status == 200){
+        	console.log(xmlHttp.responseText);
+        	
+        	/* var json = eval('(' + xmlHttp.responseText + ')');
+        	
+        	if (!json.success){
+        		var msg=json.msg;
+        		if (msg.indexOf("手机号码")>=0){
+        			showMessageBox(json.msg,function(){textSelect("userPhone");});
+        		}
+        	}else{
+        		
+        		console.log(json.msg);
+    			location.replace(json.msg);
+        	} */
+    	}else{
+    		showMessageBox("服务器错误，返回状态"+xmlHttp.status);
+    	}
+    }
+}        
+function textSelect(tid){
+	document.getElementById(tid).focus();
+	document.getElementById(tid).select();
+}
+
+String.prototype.trim= function(){  
+   return this.replace(/(^\s*)|(\s*$)/g, "");  
+}
+function init(){
+   document.getElementById("userPhone").focus();
+}
+function login(){
+   if (document.getElementById("userPhone").value.trim().length==0){
+	   showMessageBox("请输入手机号码",function(){document.getElementById("userPhone").focus();});
+	   return;
+   }
+   //showLoad();
+   doRequestUsingPost();
+}
+</script>
+<div data-role="page" >
+	<div data-role="header" >
+	  <h1>房间信息绑定</h1>
+	</div>
+	
+	<div class="box">
+	    <h3>绑定说明</h3>
+	    <div class="box_info">
+	      <p> ☺提示:<br>确认您微信绑定的手机号与预留在物业管理处的手机号一致,如不一样请到管理处重新登记处理。<br></p>
+	    </div>
+ 	 </div>
+	
+	<div data-role="content">
+  		<div data-role="fieldcontain">
+	     	<label >请输入您在物业公司预留的手机号码:</label>
+	     	<input type="text" name="userPhone" id="userPhone" placeholder="请输入手机号码...">
+    	</div>
+		<input type="button" value="提交" onclick="login()">
+	</div>
+</div>
+
+
+</body>
+</html>

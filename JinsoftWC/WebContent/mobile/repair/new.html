@@ -1,0 +1,82 @@
+<!-- <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"> -->
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="icon" href="../favicon.ico" type="image/x-icon" /> 
+<link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />     
+<link rel="stylesheet" href="../css/cover.css" />
+<link rel="stylesheet" href="../css/jquery.mobile-1.4.5.min.css">
+<script src="../js/jquery-1.7.1.min.js"></script>
+<script src="../js/jquery.mobile-1.4.5.min.js"></script>
+</head>
+<body>
+
+<script type="text/javascript">
+/* $.extend({
+	log:function(message){
+		console.log(message +new Date());
+	}
+});
+$.log("现在时刻：");
+
+ $.getJSON("https://api.weixin.qq.com/cgi-bin/menu/get?access_token=ACCESS_TOKEN", function(data){
+  $.each(data.items, function(i,item){
+    $("<img/>").attr("src", item.media.m).appendTo("#images");
+    if ( i == 3 ) return false;
+  });
+}); */ 
+
+$.ajax({
+  type: "POST",
+  url: "../KHMasterServlet",
+  function(data){
+	  console.log(data);
+	  $.each(data.items, function(i,item){
+		  
+	  });
+  }
+});
+ 
+</script>
+<div data-role="page" >
+	<!-- <div data-role="header">
+		<h1> Restaurant Picker</h1>
+	</div>  -->
+	
+	<div data-role="header" >
+		<a class= "ui-btn-left" href="#home" data-rel="back" data-icon="delete">取消</a>
+	    <h1>维修服务</h1>
+	    <a class="ui-btn-right" href="#home" data-icon="check" >保存</a>
+	</div>
+	
+	<div data-role="content">
+	  <form method="post" action="demoform.asp">
+  		<div data-role="fieldcontain" class="ui-content">
+  			<label for="building">楼盘：</label>
+	     	<select name="building" id="building" data-native-menu="true">
+			</select>
+			
+	     	<label for="mansion">楼座：</label>
+	     	<input type="text" name="mansion" id="mansion" placeholder="请输入楼座...">
+	     	<label for="storey">楼层：</label>
+	     	<input type="text" name="storey" id="storey" placeholder="请输入楼层...">
+	     	<label for="room">房号：</label>
+	     	<input type="text" name="room" id="room" placeholder="请输入房号...">
+	     	<label for="adderss">地址：</label>
+	     	<input type="text" name="adderss" id="adderss" placeholder="请输入地址...">
+	     	<label for="phone">电话：</label>
+	     	<input type="text" name="phone" id="phone" placeholder="请输入电话...">
+	     	<label for="type">性质：</label>
+	     	<input type="text" name="type" id="type" placeholder="请输入性质...">
+	     	<label for="gut">维修内容：</label>
+	     	<input type="text" name="gut" id="gut" placeholder="请输入维修内容...">
+    	</div>
+		<input type="submit" value="提交">
+	  </form>
+	</div>
+</div>
+
+
+</body>
+</html>
