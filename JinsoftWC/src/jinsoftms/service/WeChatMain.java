@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.sf.json.JSONObject;
-
 import jinsoftms.thread.AccessTokenThread;
 import jinsoftms.util.RuntimeExceptionUtil;
 import jinsoftms.util.CheckDataUtil;
@@ -19,50 +18,69 @@ import jinsoftms.util.WeChatMainUtil;
 import jinsoftms.util.MessageUtil;
 
 public class WeChatMain extends HttpServlet {
-
+	private static final long serialVersionUID = 1L; 
+	/**
+	 * 微信接口服务地址
+	 * 获取第三方应用返回用户code地址
+	 */
+	public static String WCHTTPSURL;
+	public static String WCOPENHTTPSURL;
+	/**
+	 * HTTSPURL 安全模式的地址
+	 * HTTPURI 明文模式的地址
+	 * PROJECTNAME 项目名称
+	 */
+	public static String HTTPSURL;
+	public static String HTTPURI;
+	public static String ProjectName;
+	/**
+	 * 数据库名称
+	 */
+	public static String SecurityJDBC;
 	
 	/**
-	 * 1、关于https
-	 * 2、access_token最好保存起来 解决一半
-	 * 3、xml 支持CDATA 解决
-	 * 
-	 * http://jingsoft.tunnel.mobi/jinsoftwechat/main jinsoft
-	 * http://jinsoft.tunnel.mobi/WeChat/main jinsoft
-	 * http://mrjinglan.sinaapp.com/ weixin
-	 * 
-	 * ngrok -config ngrok.cfg -subdomain jinsoft 8011
-	 * http://www.tunnel.mobi/
-	 */
-	private static final long serialVersionUID = 1L;  
-	
-	private String SecurityHttpURL;
-	private String SecurityJDBC;
+     * 第三方用户唯一凭证    
+     * 第三方用户唯一凭证密钥
+     * 获取到的凭证
+     */
+	public static String APPID;
+	public static String APPSECRET;
 	/**
 	 * 初始化access_token
 	 */
 	public void init(ServletConfig conf) throws ServletException { 
 		super.init(conf);
-		this.SecurityHttpURL = conf.getInitParameter("HTTPURL.name");
-		if (this.SecurityHttpURL == null) throw new ServletException("还没有在web.xml文件设置HTTPURL.name参数");
-		this.SecurityJDBC = conf.getInitParameter("SecurityJDBC.name");
-		if (this.SecurityJDBC == null) throw new ServletException("还没有在web.xml文件设置SecurityJDBC.name参数");
+		WCHTTPSURL = conf.getInitParameter("WCHTTPSURL");
+		if (WCHTTPSURL == null) throw new ServletException("还没有在web.xml文件设置WCHTTPSURL参数");
+		WCOPENHTTPSURL = conf.getInitParameter("WCOPENHTTPSURL");
+		if (WCOPENHTTPSURL == null) throw new ServletException("还没有在web.xml文件设置WCOPENHTTPSURL参数");
 		
-		getServletContext().setAttribute("X_Security_JDBC", this.SecurityJDBC);
-		getServletContext().setAttribute("X_Security_HttpURL", this.SecurityHttpURL);
+		HTTPSURL = conf.getInitParameter("HTTPSURL");
+		if (HTTPSURL == null) throw new ServletException("还没有在web.xml文件设置HTTPSURL参数");
+		HTTPURI = conf.getInitParameter("HTTPURL");
+		if (HTTPURI == null) throw new ServletException("还没有在web.xml文件设置HTTPURL参数");
+		ProjectName = conf.getInitParameter("Project.name");
+		if (ProjectName == null) throw new ServletException("还没有在web.xml文件设置Project.name参数");
+		
+		SecurityJDBC = conf.getInitParameter("SecurityJDBC.name");
+		if (SecurityJDBC == null) throw new ServletException("还没有在web.xml文件设置SecurityJDBC.name参数");
+		
+		getServletContext().setAttribute("X_Security_JDBC", SecurityJDBC);
 		
 		// 获取web.xml中配置的参数    
-		AccessTokenThread.APPID = conf.getInitParameter("APPID");
-		if (AccessTokenThread.APPID == null) throw new ServletException("还没有在web.xml文件设置APPID参数");
-		AccessTokenThread.APPSECRET = conf.getInitParameter("APPSECRET");
-		if (AccessTokenThread.APPSECRET == null) throw new ServletException("还没有在web.xml文件设置APPSECRET参数");
+		APPID = conf.getInitParameter("APPID");
+		if (APPID == null) throw new ServletException("还没有在web.xml文件设置APPID参数");
+		APPSECRET = conf.getInitParameter("APPSECRET");
+		if (APPSECRET == null) throw new ServletException("还没有在web.xml文件设置APPSECRET参数");
 		
-		// 未配置appid、appsecret时给出提示    
-		if ("".equals(AccessTokenThread.APPID) || "".equals(AccessTokenThread.APPSECRET)) {    
-			throw new ServletException("还没有在web.xml文件设置APPID或APPSECRET参数");   
-		} else {    
-			// 启动定时获取access_token的线程    
-			new Thread(new AccessTokenThread()).start();    
-		}    
+//		// 未配置appid、appsecret时给出提示    
+//		if ("".equals(APPID) || "".equals(APPSECRET)) {    
+//			throw new ServletException("还没有在web.xml文件设置APPID或APPSECRET参数");   
+//		} else {    
+//			// 启动定时获取access_token的线程    
+//			new Thread(new AccessTokenThread()).start();    
+//		}    
+		
 	}    
 	
 	@Override
@@ -87,6 +105,17 @@ public class WeChatMain extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		setReponse(resp);
+		System.out.println(req.getSession().getAttribute("X_Security_JDBC"));
+//		//IE地址栏地址
+//		HTTPURL = req.getRequestURL();
+//		System.out.println(HTTPURL);
+//		//相对地址 	:
+//		HTTPURI = req.getRequestURI();
+//		System.out.println(HTTPURI);
+//		//得到工程名:
+//		PROJECTNAME = req.getContextPath();
+//		System.out.println(HTTPURI);
+		
 		try {
 			Map<String, String> map = MessageUtil.xmlToMap(req);
 			String fromUserName = map.get("FromUserName");

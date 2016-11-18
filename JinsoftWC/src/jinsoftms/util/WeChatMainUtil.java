@@ -6,10 +6,12 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Properties;
 
 import net.sf.json.JSONObject;
 
@@ -28,34 +30,26 @@ import jinsoftms.database.wechat.menu.Button;
 import jinsoftms.database.wechat.menu.ClickButton;
 import jinsoftms.database.wechat.menu.Menu;
 import jinsoftms.database.wechat.menu.ViewButton;
-import jinsoftms.thread.AccessTokenThread;
-
+import jinsoftms.service.WeChatMain;
 
 public class WeChatMainUtil {
-	
-//	private static final String APPID = "wxff96a9728244e76b";
-//	private static final String APPSECRET = "41e3544021e36f205123410dba9ba445";
-
-//	微信公众号测试平台access_token	
-//	private static final String APPID = "wx7d9306bba80f8750";
-//	private static final String APPSECRET = "44ddd0f85bc6dd73be3eec74511ddce0";
-	
-	private static final String ACCESS_TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
+//	微信公众号access_token	
+	private static final String ACCESS_TOKEN_URL = WeChatMain.WCHTTPSURL+"/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
 	
 //	图片消息上传路径
-	private static final String UPLOAD_URL = "https://api.weixin.qq.com/cgi-bin/media/upload?access_token=ACCESS_TOKEN&type=TYPE";
+	private static final String UPLOAD_URL = WeChatMain.WCHTTPSURL+"/cgi-bin/media/upload?access_token=ACCESS_TOKEN&type=TYPE";
 	
 //	创建菜单请求地址
-	private static final String CREATE_MENU_URL = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=ACCESS_TOKEN";
+	private static final String CREATE_MENU_URL = WeChatMain.WCHTTPSURL+"/cgi-bin/menu/create?access_token=ACCESS_TOKEN";
 	
 //	查询菜单请求地址
-	private static final String QUERY_MENU_URL = "https://api.weixin.qq.com/cgi-bin/menu/get?access_token=ACCESS_TOKEN";
+	private static final String QUERY_MENU_URL = WeChatMain.WCHTTPSURL+"/cgi-bin/menu/get?access_token=ACCESS_TOKEN";
 	
 //	删除菜单请求地址
-	private static final String DELETE_MENU_URL = "https://api.weixin.qq.com/cgi-bin/menu/delete?access_token=ACCESS_TOKEN";
+	private static final String DELETE_MENU_URL = WeChatMain.WCHTTPSURL+"/cgi-bin/menu/delete?access_token=ACCESS_TOKEN";
 	
 //	获取第三方应用返回用户code地址(用户同意授权，获取code)
-	private static final String BIND_USER_URL = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=APPID&redirect_uri=REDIRECT_URI&response_type=code&scope=SCOPE&state=STATE#wechat_redirect";
+	private static final String BIND_USER_URL = WeChatMain.WCOPENHTTPSURL+"/connect/oauth2/authorize?appid=APPID&redirect_uri=REDIRECT_URI&response_type=code&scope=SCOPE&state=STATE#wechat_redirect";
 	
 	/**
 	 * get请求
@@ -74,9 +68,9 @@ public class WeChatMainUtil {
 				jsonObject = JSONObject.fromObject(result);
 			}
 		} catch (ClientProtocolException e) {
-			e.printStackTrace();
+			throw new RuntimeExceptionUtil(e.getMessage());
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new RuntimeExceptionUtil(e.getMessage());
 		}
 		return jsonObject;
 	}
@@ -97,7 +91,7 @@ public class WeChatMainUtil {
 			String result = EntityUtils.toString(response.getEntity(),"UTF-8");
 			jsonObject = JSONObject.fromObject(result);
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new RuntimeExceptionUtil(e.getMessage());
 		}
 		return jsonObject;
 	}
@@ -108,9 +102,8 @@ public class WeChatMainUtil {
 	 */
 	public static AccessToken getAccessToken(String APPID,String APPSECRET){
 		AccessToken token = new AccessToken();
-//		改变access_token有效时间,存储在web.xml文件提供使用
+		//改变access_token有效时间,存储在AccessToken.properties文件提供使用
 		String url = ACCESS_TOKEN_URL.replace("APPID", APPID).replace("APPSECRET", APPSECRET);
-		
 		JSONObject jsonObject = doGetStr(url);
 		if(jsonObject != null){
 			token.setAccess_token(jsonObject.getString("access_token"));
@@ -201,7 +194,7 @@ public class WeChatMainUtil {
 				result = buffer.toString();
 			}
 		}catch(IOException e){
-			e.printStackTrace();
+			throw new RuntimeExceptionUtil(e.getMessage());
 		}finally{
 			if(reader != null){
 				reader.close();
@@ -258,7 +251,7 @@ public class WeChatMainUtil {
 		ViewButton roomViewButton = new ViewButton();
 		roomViewButton.setName("房产信息");
 		roomViewButton.setType("view");
-		roomViewButton.setUrl(StaticField.HTTP_URL + StaticField.PROJECTNAME + "/mobile/repair/sevice.html");
+		roomViewButton.setUrl(WeChatMain.HTTPURI + WeChatMain.ProjectName + "/mobile/repair/sevice.html");
 		
 		ClickButton  scancodeClickButton = new ClickButton();
 		scancodeClickButton.setName("扫码事件");
@@ -283,7 +276,7 @@ public class WeChatMainUtil {
 		ViewButton repairServiceViewButton = new ViewButton();
 		repairServiceViewButton.setName("维修服务");
 		repairServiceViewButton.setType("view");
-		repairServiceViewButton.setUrl(StaticField.HTTP_URL + StaticField.PROJECTNAME + "/mobile/repair/new.html");
+		repairServiceViewButton.setUrl(WeChatMain.HTTPURI + WeChatMain.ProjectName + "/mobile/repair/sevice.html");
 		
 		ClickButton accountPayClickButton = new ClickButton();
 		accountPayClickButton.setName("欠费缴纳");
@@ -298,7 +291,7 @@ public class WeChatMainUtil {
 		ViewButton loginServiceViewButton = new ViewButton();
 		loginServiceViewButton.setName("个人主界面");
 		loginServiceViewButton.setType("view");
-		loginServiceViewButton.setUrl(StaticField.HTTP_URL + StaticField.PROJECTNAME + "/person.html");
+		loginServiceViewButton.setUrl(WeChatMain.HTTPURI + WeChatMain.ProjectName + "/person.html");
 		
 		Button clientServiceButton = new Button();
 		clientServiceButton.setName("客户服务");
@@ -310,9 +303,9 @@ public class WeChatMainUtil {
 	
 	
 	public static String bindUserCode() throws ParseException,IOException{
-		String url = BIND_USER_URL.replace("APPID", AccessTokenThread.APPID).
-				replace("REDIRECT_URI", StaticField.HTTPS_URL + StaticField.PROJECTNAME + "/reg.jsp")
-				.replace("SCOPE", "snsapi_userinfo").replace("STATE", "123");
+		String url = BIND_USER_URL.replace("APPID", WeChatMain.APPID).
+				replace("REDIRECT_URI", WeChatMain.HTTPSURL + WeChatMain.ProjectName + "/reg.jsp")
+				.replace("SCOPE", "snsapi_userinfo").replace("STATE", "1");
 		return url;
 	}
 	
