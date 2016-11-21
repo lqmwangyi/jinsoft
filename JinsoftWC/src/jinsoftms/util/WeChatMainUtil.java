@@ -6,12 +6,10 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Properties;
 
 import net.sf.json.JSONObject;
 
@@ -31,6 +29,7 @@ import jinsoftms.database.wechat.menu.ClickButton;
 import jinsoftms.database.wechat.menu.Menu;
 import jinsoftms.database.wechat.menu.ViewButton;
 import jinsoftms.service.WeChatMain;
+import jinsoftms.thread.AccessTokenThread;
 
 public class WeChatMainUtil {
 //	微信公众号access_token	
@@ -303,7 +302,7 @@ public class WeChatMainUtil {
 	
 	
 	public static String bindUserCode() throws ParseException,IOException{
-		String url = BIND_USER_URL.replace("APPID", WeChatMain.APPID).
+		String url = BIND_USER_URL.replace("APPID", AccessTokenThread.APPID).
 				replace("REDIRECT_URI", WeChatMain.HTTPSURL + WeChatMain.ProjectName + "/reg.jsp")
 				.replace("SCOPE", "snsapi_userinfo").replace("STATE", "1");
 		return url;

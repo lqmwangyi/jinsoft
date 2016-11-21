@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+
 import net.sf.json.JSONObject;
 import jinsoftms.thread.AccessTokenThread;
 import jinsoftms.util.RuntimeExceptionUtil;
@@ -38,13 +39,13 @@ public class WeChatMain extends HttpServlet {
 	 */
 	public static String SecurityJDBC;
 	
-	/**
-     * 第三方用户唯一凭证    
-     * 第三方用户唯一凭证密钥
-     * 获取到的凭证
-     */
-	public static String APPID;
-	public static String APPSECRET;
+//	/**
+//     * 第三方用户唯一凭证    
+//     * 第三方用户唯一凭证密钥
+//     * 获取到的凭证
+//     */
+//	public static String APPID;
+//	public static String APPSECRET;
 	/**
 	 * 初始化access_token
 	 */
@@ -68,18 +69,18 @@ public class WeChatMain extends HttpServlet {
 		getServletContext().setAttribute("X_Security_JDBC", SecurityJDBC);
 		
 		// 获取web.xml中配置的参数    
-		APPID = conf.getInitParameter("APPID");
-		if (APPID == null) throw new ServletException("还没有在web.xml文件设置APPID参数");
-		APPSECRET = conf.getInitParameter("APPSECRET");
-		if (APPSECRET == null) throw new ServletException("还没有在web.xml文件设置APPSECRET参数");
+		AccessTokenThread.APPID = conf.getInitParameter("APPID");
+		if (AccessTokenThread.APPID == null) throw new ServletException("还没有在web.xml文件设置APPID参数");
+		AccessTokenThread.APPSECRET = conf.getInitParameter("APPSECRET");
+		if (AccessTokenThread.APPSECRET == null) throw new ServletException("还没有在web.xml文件设置APPSECRET参数");
 		
-//		// 未配置appid、appsecret时给出提示    
-//		if ("".equals(APPID) || "".equals(APPSECRET)) {    
-//			throw new ServletException("还没有在web.xml文件设置APPID或APPSECRET参数");   
-//		} else {    
-//			// 启动定时获取access_token的线程    
-//			new Thread(new AccessTokenThread()).start();    
-//		}    
+		// 未配置appid、appsecret时给出提示    
+		if ("".equals(AccessTokenThread.APPID) || "".equals(AccessTokenThread.APPSECRET)) {    
+			throw new ServletException("还没有在web.xml文件设置APPID或APPSECRET参数");   
+		} else {    
+			// 启动定时获取access_token的线程    
+			new Thread(new AccessTokenThread()).start();    
+		}    
 		
 	}    
 	
@@ -105,7 +106,7 @@ public class WeChatMain extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		setReponse(resp);
-		System.out.println(req.getSession().getAttribute("X_Security_JDBC"));
+//		System.out.println(req.getSession().getAttribute("X_Security_JDBC"));
 //		//IE地址栏地址
 //		HTTPURL = req.getRequestURL();
 //		System.out.println(HTTPURL);
@@ -122,7 +123,7 @@ public class WeChatMain extends HttpServlet {
 			String toUserName = map.get("ToUserName");
 			String msgType = map.get("MsgType");	 
 			String content = map.get("Content");	
-			
+			System.out.println(fromUserName+"##"+toUserName+"##"+msgType+"##"+content);
 			String message = null;
 			if(MessageUtil.MESSAGE_TEXT.equals(msgType)){
 				if("0".equals(content)){
@@ -138,6 +139,9 @@ public class WeChatMain extends HttpServlet {
 				}else if("?".equals(content) || "？".equals(content)){
 					message = MessageUtil.initText(fromUserName, toUserName, MessageUtil.menuText());
 				}else if("创建菜单".equals(content) || "createmenu".equalsIgnoreCase(content)){
+//					AccessToken accessToken = AccessTokenThread.accessToken();
+//					System.out.println("sdfa1"+accessToken.getAccess_token());
+					
 					String menu = JSONObject.fromObject(WeChatMainUtil.initMenu()).toString();
 					String token = AccessTokenThread.accessToken.getAccess_token();
 					int result = WeChatMainUtil.createMenu(token, menu);
@@ -159,7 +163,11 @@ public class WeChatMain extends HttpServlet {
 					}
 					message = MessageUtil.initText(fromUserName, toUserName, msg);
 				}else  if("查询菜单".equals(content) || "querymenu".equalsIgnoreCase(content)){
+//					AccessToken accessToken = AccessTokenThread.accessToken();
+//					System.out.println("sdfa"+accessToken.getAccess_token());
+					
 					String token = AccessTokenThread.accessToken.getAccess_token();
+					System.out.println("caidan");
 					JSONObject jsonObject = WeChatMainUtil.queryMenu(token);
 					message = MessageUtil.initText(fromUserName, toUserName, jsonObject.toString());
 				}else{
@@ -214,5 +222,23 @@ public class WeChatMain extends HttpServlet {
 	    reponse.setCharacterEncoding("UTF-8");
 	}
 	
-
+//	public static void main(String[] args) {
+//		System.out.println(System.currentTimeMillis());
+//    	AccessToken accessToken = AccessTokenThread.accessToken();
+//		System.out.println("sdfa1"+accessToken.getAccess_token());
+//		
+//		String token = AccessTokenThread.accessToken.getAccess_token();
+//		System.out.println("caidan");
+//		try {
+//			JSONObject jsonObject = WeChatMainUtil.queryMenu(token);
+//System.out.println(jsonObject.toString());
+//		} catch (ParseException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+////		message = MessageUtil.initText(fromUserName, toUserName, jsonObject.toString());
+//	}
 }

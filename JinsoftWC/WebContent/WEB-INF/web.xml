@@ -40,11 +40,11 @@
 		</init-param> -->
 		<init-param>
 			<param-name>HTTPSURL</param-name>
-			<param-value>https://423f6c47.ngrok.io</param-value>
+			<param-value>https://f7262afd.ngrok.io</param-value>
 		</init-param>
 		<init-param>
 			<param-name>HTTPURL</param-name>
-			<param-value>http://423f6c47.ngrok.io</param-value>
+			<param-value>http://f7262afd.ngrok.io</param-value>
 		</init-param>
 		<init-param>
 			<param-name>Project.name</param-name>
@@ -54,15 +54,6 @@
 			<param-name>SecurityJDBC.name</param-name>
 			<param-value>JINSA</param-value>
 		</init-param>
-		<!-- 配置获取access_token所需参数appid和appsecret -->    
-		<!-- <init-param>    
-		    <param-name>APPID</param-name>    
-		    <param-value>wx7d9306bba80f8750</param-value>    
-		</init-param>    
-		<init-param>    
-		    <param-name>APPSECRET</param-name>    
-		    <param-value>44ddd0f85bc6dd73be3eec74511ddce0</param-value>    
-		</init-param>   -->  
 		<init-param>
 			<param-name>WCHTTPSURL</param-name>
 			<param-value>https://api.weixin.qq.com</param-value>
@@ -71,14 +62,23 @@
 			<param-name>WCOPENHTTPSURL</param-name>
 			<param-value>https://open.weixin.qq.com</param-value>
 		</init-param>
+		<!-- 配置获取access_token所需参数appid和appsecret -->    
 		<init-param>    
+		    <param-name>APPID</param-name>    
+		    <param-value>wx7d9306bba80f8750</param-value>    
+		</init-param>    
+		<init-param>    
+		    <param-name>APPSECRET</param-name>    
+		    <param-value>44ddd0f85bc6dd73be3eec74511ddce0</param-value>    
+		</init-param>  
+		<!-- <init-param>    
 		    <param-name>APPID</param-name>    
 		    <param-value>wx70d5f45f3ffb93c8</param-value>    
 		</init-param>    
 		<init-param>    
 		    <param-name>APPSECRET</param-name>    
 		    <param-value>0cd141769549fab5d4de814892911117</param-value>    
-		</init-param>  
+		</init-param>   -->
 		<load-on-startup>0</load-on-startup>   
 	</servlet>
 	

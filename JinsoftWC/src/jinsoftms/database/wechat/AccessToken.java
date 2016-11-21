@@ -1,7 +1,5 @@
 package jinsoftms.database.wechat;
 
-import jinsoftms.thread.AccessTokenThread;
-
 public class AccessToken {
 	/**
 	 	access_token	获取到的凭证
@@ -11,10 +9,6 @@ public class AccessToken {
 	private int expires_in;
 	
 	public String getAccess_token() {
-		if(access_token==null){
-			// 启动定时获取access_token的线程   
-			new Thread(new AccessTokenThread()).start(); 
-		}
 		return access_token;
 	}
 	public void setAccess_token(String access_token) {
