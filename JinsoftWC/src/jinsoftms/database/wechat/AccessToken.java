@@ -8,6 +8,9 @@ public class AccessToken {
 	private String access_token;
 	private int expires_in;
 	
+	//自增字段
+	private long timestamp;
+	
 	public String getAccess_token() {
 		return access_token;
 	}
@@ -20,4 +23,11 @@ public class AccessToken {
 	public void setExpires_in(int expires_in) {
 		this.expires_in = expires_in;
 	}
+	public long getTimestamp() {
+		return timestamp;
+	}
+	public void setTimestamp(long timestamp) {
+		this.timestamp = timestamp;
+	}
+	
 }

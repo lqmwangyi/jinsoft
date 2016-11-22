@@ -79,7 +79,8 @@ public class WeChatMain extends HttpServlet {
 			throw new ServletException("还没有在web.xml文件设置APPID或APPSECRET参数");   
 		} else {    
 			// 启动定时获取access_token的线程    
-			new Thread(new AccessTokenThread()).start();    
+			AccessTokenThread at = new AccessTokenThread();
+			at.run(); 
 		}    
 		
 	}    
