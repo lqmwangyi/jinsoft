@@ -257,9 +257,14 @@ public class WeChatMainUtil {
 		scancodeClickButton.setType("scancode_push");
 		scancodeClickButton.setKey(" Scancode");
 		
+		ViewButton accountQueryClickButton = new ViewButton();
+		accountQueryClickButton.setName("欠费查询");
+		accountQueryClickButton.setType("view");
+		accountQueryClickButton.setUrl(WeChatMain.HTTPURI + WeChatMain.ProjectName + "/reg.html");
+		
 		Button clientMessageButton = new Button();
 		clientMessageButton.setName("客户信息");
-		clientMessageButton.setSub_button(new Button[]{roomViewButton,scancodeClickButton});
+		clientMessageButton.setSub_button(new Button[]{roomViewButton,scancodeClickButton,accountQueryClickButton});
 		
 //		ClickButton clientServiceClickButton = new ClickButton();
 //		clientServiceClickButton.setName("客户服务");
@@ -302,9 +307,11 @@ public class WeChatMainUtil {
 	
 	
 	public static String bindUserCode() throws ParseException,IOException{
+		String httpsurl = WeChatMain.HTTPSURL;
 		String url = BIND_USER_URL.replace("APPID", AccessTokenThread.APPID).
-				replace("REDIRECT_URI", WeChatMain.HTTPSURL + WeChatMain.ProjectName + "/reg.jsp")
-				.replace("SCOPE", "snsapi_userinfo").replace("STATE", "1");
+				replace("REDIRECT_URI", httpsurl + WeChatMain.ProjectName + "/reg.html")
+				.replace("SCOPE", httpsurl.toString().contains("https")?"snsapi_userinfo":"snsapi_base")
+				.replace("STATE", "0");
 		return url;
 	}
 	

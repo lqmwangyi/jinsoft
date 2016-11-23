@@ -2,8 +2,7 @@ package jinsoftms.controller;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,64 +12,101 @@ import jinsoftms.util.RuntimeExceptionUtil;
 import jinsoftms.util.accesstoken.DBUtil;
 
 public class AccessTokenController extends AbstractBusiness {
+	private Connection c = null;
 	public DBUtil db;
 	
 	//检查accesstoken是否有效
 	public boolean checkToken(){
-		db = new DBUtil();
 		try{
-			db.DBOpention();
+			DBOpention();
+			
+			db = new DBUtil(c);
 //			db.createTable(db.c);
 			
-			AccessToken accesstoken = (AccessToken) db.queryTable(db.c, "SELECT * FROM AccessToken where id=1;");
+			AccessToken accesstoken = (AccessToken) db.queryTable("SELECT * FROM AccessToken where id=1;");
 			System.out.println(accesstoken.getAccess_token());
 			if(accesstoken.getAccess_token()==null){
 				return false;
 			}else{
-				long time = (System.currentTimeMillis() - accesstoken.getTimestamp()) / (1000 * 60);
-				System.out.println("使用时长："+time);
-				long expires_in =accesstoken.getExpires_in()-time;
-				System.out.println("剩余有效时间："+ expires_in);
-				if (expires_in > 0) {
-					Map<String, String> mp = new HashMap<String, String>();
-					mp.put("expires_in", (expires_in+""));
-					db.updateTable(db.c, mp);
-					this.resultstr=accesstoken.getAccess_token().toString() + "," + expires_in;
-					return true;
-				} else {
+				System.out.println(System.currentTimeMillis()+" 时间戳 "+accesstoken.getTimestamp());
+				long timemills = System.currentTimeMillis() - accesstoken.getTimestamp();
+				if(timemills>7200000){
 					return false;
+				}else{
+					//换算成秒
+					long time = timemills / (1000);
+					System.out.println("原时长："+accesstoken.getExpires_in()+",使用时长："+time+"秒");
+					long expires_in = accesstoken.getExpires_in()-time;
+					System.out.println("剩余有效时长："+ expires_in+"秒");
+					if (expires_in > 20) {
+						Map<String, String> mp = new HashMap<String, String>();
+						mp.put("expires_in", (expires_in+""));
+						mp.put("timestamp", (System.currentTimeMillis()+""));
+						db.updateTable(mp);
+						this.resultstr=accesstoken.getAccess_token().toString() + "," + expires_in;
+						return true;
+					} else {
+						return false;
+					}
 				}
 			}
 		} catch (Exception ex) {
 			System.err.println(ex.getClass().getName() + ": " + ex.getMessage());
 			throw new RuntimeExceptionUtil(ex);
 		}finally{
-			db.DBClosetion();
+			DBClosetion();
 		}
 	}
 	
 	//保存accesstoken
 	public boolean saveorupdate(AccessToken access_token){
-		db = new DBUtil(access_token.getAccess_token(),access_token.getExpires_in());
 		try{
-			db.DBOpention();
-			AccessToken accesstoken = (AccessToken) db.queryTable(db.c, "SELECT * FROM AccessToken where id=1;");
+			DBOpention();
+			
+			db = new DBUtil(c,access_token.getAccess_token(),access_token.getExpires_in());
+			
+			AccessToken accesstoken = (AccessToken) db.queryTable("SELECT * FROM AccessToken where id=1;");
 			if(accesstoken.getAccess_token()==null){
-				db.insertTable(db.c);
+				db.insertTable();
 			}else{
 				Map<String, String> mp = new HashMap<String, String>();
 				mp.put("access_token", access_token.getAccess_token());
 				mp.put("expires_in", (access_token.getExpires_in()+""));
-				db.updateTable(db.c, mp);
+				db.updateTable(mp);
 			}
 		} catch (Exception ex) {
 			System.err.println(ex.getClass().getName() + ": " + ex.getMessage());
 			throw new RuntimeExceptionUtil(ex);
 		}finally{
-			db.DBClosetion();
+			DBClosetion();
 		}
 		return true;
 	}
+	
+	public void DBOpention(){
+		try {
+			Class.forName("org.sqlite.JDBC");
+			c = DriverManager.getConnection("jdbc:sqlite:d:\\jinsoftwc.db");
+			System.out.println("Opened database successfully");
+			
+//			dropTable();
+//			queryTable();
+		} catch (Exception ex) {
+			System.err.println(ex.getClass().getName() + ": " + ex.getMessage());
+			throw new RuntimeExceptionUtil(ex);
+		}
+	}
+	
+	public void DBClosetion() {  
+		if(c != null){
+			try {
+				c.close();
+			} catch (SQLException ex) {
+				throw new RuntimeExceptionUtil(ex);
+			}
+			c=null;
+		}
+    }  
 	
 //	public static void main(String[] args) {
 //		Connection c = null;

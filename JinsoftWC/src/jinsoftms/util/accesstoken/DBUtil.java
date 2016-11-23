@@ -1,9 +1,7 @@
 package jinsoftms.util.accesstoken;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Map;
 
@@ -11,53 +9,24 @@ import jinsoftms.database.wechat.AccessToken;
 import jinsoftms.util.RuntimeExceptionUtil;
 
 public class DBUtil {
-	public Connection c = null;
-	public Statement stmt = null;
+	private Connection c = null;
+	private Statement stmt = null;
 	
 	private String access_token;
 	private int expires_in;
 	
-	public DBUtil(String access_token, int expires_in){
+	public DBUtil(Connection c, String access_token, int expires_in){
+		this.c = c;
 		this.access_token=access_token;
 		this.expires_in=expires_in;
+	}
+	public DBUtil(Connection c){
+		this.c = c;
 	}
 	
 	public DBUtil(){ }
 	
-	public void DBOpention(){
-		try {
-			Class.forName("org.sqlite.JDBC");
-			c = DriverManager.getConnection("jdbc:sqlite:d:\\jinsoftwc.db");
-			System.out.println("Opened database successfully");
-			
-//			dropTable(c);
-//			queryTable(c);
-		} catch (Exception ex) {
-			System.err.println(ex.getClass().getName() + ": " + ex.getMessage());
-			throw new RuntimeExceptionUtil(ex);
-		}
-	}
-	
-	public void DBClosetion() {  
-		if(stmt != null){
-			try {
-				stmt.close();
-			} catch (SQLException ex) {
-				throw new RuntimeExceptionUtil(ex);
-			}
-			stmt=null;
-		}
-		if(c != null){
-			try {
-				c.close();
-			} catch (SQLException ex) {
-				throw new RuntimeExceptionUtil(ex);
-			}
-			c=null;
-		}
-    }  
-
-	public void createTable(Connection c) {
+	public void createTable() {
 		try {
 			stmt = c.createStatement();
 			String sql = "CREATE TABLE AccessToken "
@@ -79,7 +48,7 @@ public class DBUtil {
 		System.out.println("Table created successfully");
 	}
 
-	public boolean insertTable(Connection c) {
+	public boolean insertTable() {
 		boolean flag=false;
 		try {
 			c.setAutoCommit(false);
@@ -89,7 +58,7 @@ public class DBUtil {
 //			stmt.executeUpdate(sql);
 //
 			String sql = "INSERT INTO AccessToken (ID,access_token,expires_in,timestamp) "
-					+ "VALUES (1, '"+this.access_token+"', "+this.expires_in+", '"+System.currentTimeMillis()+"');";
+					+ "VALUES (1, '"+ access_token +"', "+ expires_in +", '"+System.currentTimeMillis()+"');";
 			stmt.executeUpdate(sql);
 			stmt.close();
 			c.commit();
@@ -102,7 +71,7 @@ public class DBUtil {
 		return flag;
 	}
 
-	public Object queryTable(Connection c, String sql) {
+	public Object queryTable(String sql) {
 		AccessToken sle = null;
 		try {
 			c.setAutoCommit(false);
@@ -145,22 +114,22 @@ public class DBUtil {
 		return sle;
 	}
 
-	public void updateTable(Connection c,Map<String, String> mp) {
+	public void updateTable(Map<String, String> mp) {
 		try {
 			c.setAutoCommit(false);
 			stmt = c.createStatement();
 			
 			String sql = "";
 			if(mp.containsKey("access_token")){
-				sql = "UPDATE AccessToken set access_token ='"+this.access_token+"' where id=1;";
+				sql = "UPDATE AccessToken set access_token ='"+mp.get("access_token")+"' where id=1;";
 				stmt.executeUpdate(sql);
 			}
 			if(mp.containsKey("expires_in")){
-				sql = "UPDATE AccessToken set expires_in ='"+this.expires_in+"' where id=1;";
+				sql = "UPDATE AccessToken set expires_in ='"+mp.get("expires_in")+"' where id=1;";
 				stmt.executeUpdate(sql);
 			}
 			if(mp.containsKey("timestamp")){
-				sql = "UPDATE AccessToken set timestamp ='"+System.currentTimeMillis()+"' where id=1;";
+				sql = "UPDATE AccessToken set timestamp ='"+mp.get("timestamp")+"' where id=1;";
 				stmt.executeUpdate(sql);
 			}
 			c.commit();
@@ -172,7 +141,7 @@ public class DBUtil {
 		System.out.println("Update table successfully");
 	}
 
-	public void deleteTable(Connection c, String sql) {
+	public void deleteTable(String sql) {
 		try {
 			c.setAutoCommit(false);
 			stmt = c.createStatement();
@@ -186,7 +155,7 @@ public class DBUtil {
 		System.out.println("delete table successfully");
 	}
 
-	public void dropTableData(Connection c) {
+	public void dropTableData() {
 		try {
 			c.setAutoCommit(false);
 			stmt = c.createStatement();
@@ -200,7 +169,7 @@ public class DBUtil {
 		System.out.println("drop tableData successfully");
 	}
 	
-	public void dropTable(Connection c) {
+	public void dropTable() {
 		try {
 			c.setAutoCommit(false);
 			stmt = c.createStatement();
@@ -215,7 +184,7 @@ public class DBUtil {
 	}
 
 
-	public void alterTable(Connection c, String sql) {
+	public void alterTable(String sql) {
 		try {
 			stmt = c.createStatement();
 //			String sql = "ALTER TABLE AccessToken ADD COLUMN AddTime TEXT;"

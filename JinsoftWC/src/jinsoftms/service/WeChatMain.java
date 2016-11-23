@@ -46,6 +46,8 @@ public class WeChatMain extends HttpServlet {
 //     */
 //	public static String APPID;
 //	public static String APPSECRET;
+	public AccessTokenThread accesstokenthread;
+	
 	/**
 	 * 初始化access_token
 	 */
@@ -74,14 +76,15 @@ public class WeChatMain extends HttpServlet {
 		AccessTokenThread.APPSECRET = conf.getInitParameter("APPSECRET");
 		if (AccessTokenThread.APPSECRET == null) throw new ServletException("还没有在web.xml文件设置APPSECRET参数");
 		
-		// 未配置appid、appsecret时给出提示    
-		if ("".equals(AccessTokenThread.APPID) || "".equals(AccessTokenThread.APPSECRET)) {    
-			throw new ServletException("还没有在web.xml文件设置APPID或APPSECRET参数");   
-		} else {    
-			// 启动定时获取access_token的线程    
-//			AccessTokenThread at = new AccessTokenThread();
-			new Thread(new AccessTokenThread()).start();    
-		}    
+		accesstokenthread = new AccessTokenThread();
+//		// 未配置appid、appsecret时给出提示    
+//		if ("".equals(AccessTokenThread.APPID) || "".equals(AccessTokenThread.APPSECRET)) {    
+//			throw new ServletException("还没有在web.xml文件设置APPID或APPSECRET参数");   
+//		} else {    
+//			// 启动定时获取access_token的线程    
+////			AccessTokenThread at = new AccessTokenThread();
+//			new Thread(new AccessTokenThread()).start();    
+//		}    
 		
 	}    
 	
@@ -125,6 +128,7 @@ public class WeChatMain extends HttpServlet {
 			String msgType = map.get("MsgType");	 
 			String content = map.get("Content");	
 			System.out.println(fromUserName+"##"+toUserName+"##"+msgType+"##"+content);
+			
 			String message = null;
 			if(MessageUtil.MESSAGE_TEXT.equals(msgType)){
 				if("0".equals(content)){
@@ -139,56 +143,66 @@ public class WeChatMain extends HttpServlet {
 					message = MessageUtil.initMusicMessage(fromUserName, toUserName);
 				}else if("?".equals(content) || "？".equals(content)){
 					message = MessageUtil.initText(fromUserName, toUserName, MessageUtil.menuText());
-				}else if("创建菜单".equals(content) || "createmenu".equalsIgnoreCase(content)){
-//					AccessToken accessToken = AccessTokenThread.accessToken();
-//					System.out.println("sdfa1"+accessToken.getAccess_token());
+				}else {
+	//				TextMessage text = new TextMessage();
+	//				text.setFromUserName(toUserName);
+	//				text.setToUserName(fromUserName);
+	//				text.setMsgType("text");
+	//				text.setCreateTime(new Date().toString());
+	//				text.setContent("你发送的消息是: "+content);
+	//				message = Message.textMessageToXml(text);
+					//从sqlite表中获得
+					String token = accesstokenthread.accessToken().getAccess_token();
+					System.out.println(token);
 					
-					String menu = JSONObject.fromObject(WeChatMainUtil.initMenu()).toString();
-					String token = AccessTokenThread.accessToken.getAccess_token();
-					int result = WeChatMainUtil.createMenu(token, menu);
-					String msg = "";
-					if(result == 0){
-						msg = "创建菜单成功";
+					if("创建菜单".equals(content) || "createmenu".equalsIgnoreCase(content)){
+	//					AccessToken accessToken = AccessTokenThread.accessToken();
+	//					System.out.println("sdfa1"+accessToken.getAccess_token());
+						
+						String menu = JSONObject.fromObject(WeChatMainUtil.initMenu()).toString();
+						//从线程获取的token
+//						String token = AccessTokenThread.accessToken.getAccess_token();
+						
+						int result = WeChatMainUtil.createMenu(token, menu);
+						String msg = "";
+						if(result == 0){
+							msg = "创建菜单成功";
+						}else{
+							msg = "错误码：" + result;
+						}
+						message = MessageUtil.initText(fromUserName, toUserName, msg);
+					}else if("删除菜单".equals(content) || "deletemenu".equalsIgnoreCase(content)){
+//						String token = AccessTokenThread.accessToken.getAccess_token();
+						
+						int result = WeChatMainUtil.deleteMenu(token);
+						String msg = "";
+						if(result == 0){
+							msg = "删除菜单成功";
+						}else{
+							msg = "错误码：" + result;
+						}
+						message = MessageUtil.initText(fromUserName, toUserName, msg);
+					}else  if("查询菜单".equals(content) || "querymenu".equalsIgnoreCase(content)){
+						
+//						String token = AccessTokenThread.accessToken.getAccess_token();
+						JSONObject jsonObject = WeChatMainUtil.queryMenu(token);
+						message = MessageUtil.initText(fromUserName, toUserName, jsonObject.toString());
 					}else{
-						msg = "错误码：" + result;
+						message = MessageUtil.initText(fromUserName, toUserName, "没找到需要的指令");
 					}
-					message = MessageUtil.initText(fromUserName, toUserName, msg);
-				}else if("删除菜单".equals(content) || "deletemenu".equalsIgnoreCase(content)){
-					String token = AccessTokenThread.accessToken.getAccess_token();
-					int result = WeChatMainUtil.deleteMenu(token);
-					String msg = "";
-					if(result == 0){
-						msg = "删除菜单成功";
-					}else{
-						msg = "错误码：" + result;
-					}
-					message = MessageUtil.initText(fromUserName, toUserName, msg);
-				}else  if("查询菜单".equals(content) || "querymenu".equalsIgnoreCase(content)){
-//					AccessToken accessToken = AccessTokenThread.accessToken();
-//					System.out.println("sdfa"+accessToken.getAccess_token());
-					
-					String token = AccessTokenThread.accessToken.getAccess_token();
-					System.out.println("caidan");
-					JSONObject jsonObject = WeChatMainUtil.queryMenu(token);
-					message = MessageUtil.initText(fromUserName, toUserName, jsonObject.toString());
-				}else{
-					message = MessageUtil.initText(fromUserName, toUserName, "没找到需要的指令");
 				}
-				
-//				TextMessage text = new TextMessage();
-//				text.setFromUserName(toUserName);
-//				text.setToUserName(fromUserName);
-//				text.setMsgType("text");
-//				text.setCreateTime(new Date().toString());
-//				text.setContent("你发送的消息是: "+content);
-//				message = Message.textMessageToXml(text);
 				
 			}else if(MessageUtil.MESSAGE_EVENT.equals(msgType)){
 				String eventType = map.get("Event");
 				if(MessageUtil.MESSAGE_SUBSCRIBE.equals(eventType)){
 					message = MessageUtil.initText(fromUserName, toUserName, MessageUtil.menuText());
 				}else if(MessageUtil.MESSAGE_CLICK.equals(eventType)){
-					String token = AccessTokenThread.accessToken.getAccess_token();
+//					String token = AccessTokenThread.accessToken.getAccess_token();
+					
+					//从sqlite表中获得
+					String token = accesstokenthread.accessToken().getAccess_token();
+					System.out.println(token);
+					
 					message = MessageUtil.initText(fromUserName, toUserName, token);
 				}else if(MessageUtil.MESSAGE_VIEW.equals(eventType)){
 					String url = map.get("EventKey");

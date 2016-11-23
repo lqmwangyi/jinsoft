@@ -40,11 +40,11 @@
 		</init-param> -->
 		<init-param>
 			<param-name>HTTPSURL</param-name>
-			<param-value>https://9568640c.ngrok.io</param-value>
+			<param-value>https://60d6b1f0.ngrok.io</param-value>
 		</init-param>
 		<init-param>
 			<param-name>HTTPURL</param-name>
-			<param-value>http://9568640c.ngrok.io</param-value>
+			<param-value>http://60d6b1f0.ngrok.io</param-value>
 		</init-param>
 		<init-param>
 			<param-name>Project.name</param-name>

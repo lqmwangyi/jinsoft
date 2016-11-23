@@ -2,9 +2,11 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xml:lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>认证界面</title>
-<script type="text/javascript" src="js/jquery-1.7.1.min.js"></script>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+<title>认证界面</title> 
+<link rel="stylesheet" href="//res.wx.qq.com/open/libs/weui/1.1.0/weui.min.css"/>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script language="javascript">
 function get_mobile_code(){
 	$.post('sms.jsp', {mobile:jQuery.trim($('#mobile').val())}, function(msg){
@@ -61,6 +63,23 @@ function RemainTime(){
 			<input id="mobile_code" name="mobile_code" type="text" placeholder="输入验证码" size="13" class="inputBg"/>
 			<input id="zphone" type="button" value="获取验证码" onClick="get_mobile_code();" />
 		</td>
+		</tr>
+		<tr>
+			<td>
+				<a href="javascript:;" class="weui_btn weui_btn_primary">按钮</a>
+				<a href="#" class="weui_btn weui_btn_disabled weui_btn_primary">按钮</a>
+				<a href="#" class="weui_btn weui_btn_warn">确认</a>
+				<a href="#" class="weui_btn weui_btn_disabled weui_btn_warn">确认</a>
+				<a href="#" class="weui_btn weui_btn_default">按钮</a>
+				<a href="#" class="weui_btn weui_btn_disabled weui_btn_default">按钮</a>
+				<div class="button_sp_area">
+				    <a href="#" class="weui_btn weui_btn_plain_default">按钮</a>
+				    <a href="#" class="weui_btn weui_btn_plain_primary">按钮</a>
+				
+				    <a href="#" class="weui_btn weui_btn_mini weui_btn_primary">按钮</a>
+				    <a href="#" class="weui_btn weui_btn_mini weui_btn_default">按钮</a>
+				</div>	
+			</td>
 		</tr>
 	</table>
 </form>

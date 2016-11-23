@@ -11,25 +11,22 @@ public class AccessTokenThread extends AbstractBusiness implements Runnable {
 	public static String APPID;
 	public static String APPSECRET;
 
-	// public AccessToken accessToken(){
-	// String access_token = checkPros();
-	// System.out.println(access_token);
-	// if(access_token != null){
-	// System.out.println("pros"+access_token);
-	// accessToken.setAccess_token(access_token);
-	// return accessToken;
-	// }else{
-	// System.out.println("chuang"+access_token);
-	// accessToken =
-	// WeChatMainUtil.getAccessToken(WeChatMain.APPID,WeChatMain.APPSECRET);
-	// if (accessToken != null) {
-	// boolean isW = writeProperties(accessToken);
-	// return isW?accessToken:null;
-	// }else{
-	// return null;
-	// }
-	// }
-	// }
+	 public AccessToken accessToken(){
+		AccessTokenController ac = new AccessTokenController();
+		if(ac.checkToken()){
+			System.out.println("检查数据结果: "+ ac.getResultString());
+			AccessToken access_token = new AccessToken();
+			String str[]=ac.getResultString().split(",");
+			access_token.setAccess_token(str[0]);
+			access_token.setExpires_in(new Integer(str[1]));
+			accessToken = access_token;
+		}else{
+			System.out.println("新建token数据");
+			accessToken = WeChatMainUtil.getAccessToken(APPID, APPSECRET);
+			ac.saveorupdate(accessToken);
+		}
+		return accessToken;
+	 }
 
 	public void run() {
 		while (true) {
