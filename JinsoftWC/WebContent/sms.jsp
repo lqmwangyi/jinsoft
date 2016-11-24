@@ -3,8 +3,8 @@ String postUrl = "http://106.ihuyi.cn/webservice/sms.php?method=Submit";
 
 int mobile_code = (int)((Math.random()*9+1)*100000);
 
-String account = "cf_liuqimei";
-String password = "xiao456731";
+String account = "cf_jingsoft";
+String password = "23192319";
 String mobile = request.getParameter("mobile");
 String content = new String("您的验证码是：" + mobile_code + "。请不要把验证码泄露给其他人。");
 

@@ -7,11 +7,14 @@
 <link rel="icon" href="favicon.ico" type="image/x-icon" /> 
 <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /> 
 <link rel="stylesheet" href="style/weui.min.css">
-<!-- <script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
- -->
  <script type="text/javascript" src="js/jquery-1.7.1.min.js"></script>
  </head>
-<body ontouchstart>
+<body>
+
+<br>
+<div class="page__hd">
+    <h3 class="page__title" align="center">精软物业</h3>
+</div>
 
 <div class="weui-cells weui-cells_form">
 	<div class="weui-cell">
@@ -36,15 +39,27 @@
 	        <button class="weui-vcode-btn" id="vcode-btn">获取验证码</button>
 	    </div>
 	</div>
+	<div class="weui-cell weui-cell_vcode">
+	    <div class="weui-cell__hd">
+			<label for="weuiAgree" class="weui-agree">
+			    <input id="weuiAgree" type="checkbox" class="weui-agree__checkbox">
+			    <span class="weui-agree__text">
+			        	阅读并同意<a href="javascript:void(0);">《相关条款》</a>
+			    </span>
+			</label>
+	    </div>
+    </div>
 </div>
-<label for="weuiAgree" class="weui-agree">
-    <input id="weuiAgree" type="checkbox" class="weui-agree__checkbox">
-    <span class="weui-agree__text">
-        	阅读并同意<a href="javascript:void(0);">《相关条款》</a>
-    </span>
-</label>
+
 <div class="weui-btn-area">
     <a class="weui-btn weui-btn_primary" href="javascript:" id="showTooltips">确定</a>
+</div>
+
+<br>
+<br>
+<div class="weui-footer">
+    <p class="weui-footer__text">Copyright ©2016 广州市精软网络数据有限公司 All Right Reserved</p>
+    <p class="weui-footer__text">粤ICP备06034825号</p>
 </div>
 
 <script type="text/javascript">
