@@ -15,7 +15,6 @@
 <br>
 <div class="page__hd">
     <h3 class="page__title" align="center">精软物业</h3>
-    <!-- <p class="page__desc">表单输入</p> -->
 </div>
 
 <div class="weui-cells weui-cells_form">
