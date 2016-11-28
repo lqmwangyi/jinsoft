@@ -97,7 +97,27 @@
 	</table>
 </form> -->
 
+
+<div id="dialogs">
+<!--BEGIN dialog2-->
+<div class="js_dialog" id="iosDialog2" style="display: none;">
+    <div class="weui-mask"></div>
+    <div class="weui-dialog">
+    	<div class="weui-dialog__hd"><strong class="weui-dialog__title">消息提示</strong></div>
+        <div class="weui-dialog__bd" id="msgConent">消息内容</div>
+        <div class="weui-dialog__ft">
+            <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_primary" id="zhidao">知道了</a>
+        </div>
+    </div>
+</div>
+<!--END dialog2-->
+</div>
+
 <script language="javascript">
+$('#zhidao').on('click',function(){
+	$('#iosDialog2').fadeOut(100);
+});
+
 function get_mobile_code(){
 	$.post('sms.jsp', {mobile:jQuery.trim($('#mobile').val())}, function(msg){
 		RemainTime(msg);
@@ -106,37 +126,45 @@ function get_mobile_code(){
 
 var Account, msgText, iTime=59;
 function RemainTime(msg){
+	
 	$(msg).find("msg").each(function(index, item) {
 	    msgText = $(item).text();
 	});
 	
-	document.getElementById('vcode-btn').disable = true;
-	var iSecond,sSecond="",sTime="";
-	if(iTime >= 0){
-		iSecond = parseInt(iTime%60);
-		iMinute = parseInt(iTime/60);
-		if(iSecond >= 0){
-			if(iMinute > 0){
-				sSecond = iMinute + "分" + iSecond + "秒";
-			}else{
-				sSecond = iSecond + "秒";
+	console.log(msgText=='提交成功');
+	if(msgText=='提交成功'){
+		//document.getElementById('vcode-btn').disable = true;
+		$('#vcode-btn').attr('class','weui-vcode-btn weui-vcode-btn_disabled'); 
+		var iSecond,sSecond="",sTime="";
+		if(iTime >= 0){
+			iSecond = parseInt(iTime%60);
+			iMinute = parseInt(iTime/60);
+			if(iSecond >= 0){
+				if(iMinute > 0){
+					sSecond = iMinute + "分" + iSecond + "秒";
+				}else{
+					sSecond = iSecond + "秒";
+				}
 			}
-		}
-		sTime=msgText+"("+sSecond+")";
-		if(iTime==0){
-			clearTimeout(Account);
-			sTime='获取验证码';
-			iTime=59;
-			document.getElemenById('vcode-btn').disabled = false;
+			sTime=msgText+"("+sSecond+")";
+			if(iTime==0){
+				clearTimeout(Account);
+				sTime='获取验证码';
+				iTime=59;
+				$('#vcode-btn').attr('class','weui-vcode-btn'); 
+				//document.getElemenById('vcode-btn').disabled = false;
+			}else{
+				Account = setTimeout("RemainTime()",1000);
+				iTime=iTime-1;
+			}
 		}else{
-			Account = setTimeout("RemainTime()",1000);
-			iTime=iTime-1;
+			sTime='没有倒计时';
 		}
+		document.getElementById('vcode-btn').textContent = sTime;
 	}else{
-		sTime='没有倒计时';
+		$('#iosDialog2').fadeIn(200);
+		document.getElementById('msgConent').textContent = msgText;
 	}
-	console.log(sTime);
-	document.getElementById('vcode-btn').value = sTime;
 }
 </script>
 </body>
