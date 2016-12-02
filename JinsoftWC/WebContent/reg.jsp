@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xml:lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN">
 <head>
@@ -23,7 +24,7 @@
          	<label class="weui-label">手机号</label>
          </div>
          <div class="weui-cell__bd">
-             <input class="weui-input" id="mobile" type="tel" placeholder="请输入手机号"/>
+             <input class="weui-input" id="mobile" name="mobile" type="tel" placeholder="请输入手机号"/>
          </div>
          <div class="weui-cell__ft">
              <i class="weui-icon-warn"></i>
@@ -34,16 +35,16 @@
 	        <label class="weui-label">验证码</label>
 	    </div>
 	    <div class="weui-cell__bd">
-	        <input class="weui-input" type="number" pattern="[0-9][4]" value="weui input error" placeholder="请输入验证码">
+	        <input class="weui-input" id="vcode" name="vcode" type="number" pattern="[0-9][4]" placeholder="请输入验证码">
 	    </div>
 	    <div class="weui-cell__ft">
-	        <button class="weui-vcode-btn" id="vcode-btn" onClick="get_mobile_code();">获取验证码</button>
+	        <button class="weui-vcode-btn" id="vcode-btn" disable='disable' onClick="get_mobile_code();">获取验证码</button>
 	    </div>
 	</div>
 	<div class="weui-cell weui-cell_vcode">
 	    <div class="weui-cell__hd">
 			<label for="weuiAgree" class="weui-agree">
-			    <input id="weuiAgree" type="checkbox" class="weui-agree__checkbox">
+			    <input id="weuiAgree" type="checkbox" checked="checked" class="weui-agree__checkbox">
 			    <span class="weui-agree__text">
 			        	阅读并同意<a href="javascript:void(0);">《相关条款》</a>
 			    </span>
@@ -77,23 +78,6 @@
 			<input id="zphone" type="button" value="获取验证码" onClick="get_mobile_code();" />
 		</td>
 		</tr>
-		<tr>
-			<td>
-				<a href="javascript:;" class="weui_btn weui_btn_primary">按钮</a>
-				<a href="#" class="weui_btn weui_btn_disabled weui_btn_primary">按钮</a>
-				<a href="#" class="weui_btn weui_btn_warn">确认</a>
-				<a href="#" class="weui_btn weui_btn_disabled weui_btn_warn">确认</a>
-				<a href="#" class="weui_btn weui_btn_default">按钮</a>
-				<a href="#" class="weui_btn weui_btn_disabled weui_btn_default">按钮</a>
-				<div class="button_sp_area">
-				    <a href="#" class="weui_btn weui_btn_plain_default">按钮</a>
-				    <a href="#" class="weui_btn weui_btn_plain_primary">按钮</a>
-				
-				    <a href="#" class="weui_btn weui_btn_mini weui_btn_primary">按钮</a>
-				    <a href="#" class="weui_btn weui_btn_mini weui_btn_default">按钮</a>
-				</div>	
-			</td>
-		</tr>
 	</table>
 </form> -->
 
@@ -113,6 +97,11 @@
 <!--END dialog2-->
 </div>
 
+<%
+String mobile_code = request.getParameter("mobile_code");
+System.out.println(mobile_code);
+
+%>
 <script language="javascript">
 $('#zhidao').on('click',function(){
 	$('#iosDialog2').fadeOut(100);
@@ -133,8 +122,8 @@ function RemainTime(msg){
 	
 	console.log(msgText=='提交成功');
 	if(msgText=='提交成功'){
-		//document.getElementById('vcode-btn').disable = true;
-		$('#vcode-btn').attr('class','weui-vcode-btn weui-vcode-btn_disabled'); 
+		$('#vcode-btn').attr('disabled','disabled');
+		$('#vcode-btn').attr('class','weui-btn weui_btn_disabled weui_btn_default');
 		var iSecond,sSecond="",sTime="";
 		if(iTime >= 0){
 			iSecond = parseInt(iTime%60);
@@ -146,13 +135,15 @@ function RemainTime(msg){
 					sSecond = iSecond + "秒";
 				}
 			}
-			sTime=msgText+"("+sSecond+")";
+			/* 以提交反馈内容为显示信息拼接休眠时间 */
+			//sTime=msgText+"("+sSecond+")";
+			sTime="("+sSecond+")"+"之后重新获取";
 			if(iTime==0){
 				clearTimeout(Account);
 				sTime='获取验证码';
 				iTime=59;
-				$('#vcode-btn').attr('class','weui-vcode-btn'); 
-				//document.getElemenById('vcode-btn').disabled = false;
+				$('#vcode-btn').attr('class','weui-vcode-btn');
+				$('#vcode-btn').attr('disabled','');
 			}else{
 				Account = setTimeout("RemainTime()",1000);
 				iTime=iTime-1;

@@ -1,11 +1,21 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8"%><%@ page import = "java.io.*" %><%@ page import = "java.net.*" %><%@ page import = "java.util.*" %><%@ page import = "java.lang.*" %><%
 String postUrl = "http://106.ihuyi.cn/webservice/sms.php?method=Submit";
 
-int mobile_code = (int)((Math.random()*9+1)*100000);
-
 String account = "cf_jingsoft";
 String password = "23192319";
 String mobile = request.getParameter("mobile");
+String vcode = request.getParameter("vcode");
+if(mobile && vcode){
+	String oldcode = request.getSession().getAttribute("moblie_code");
+	if(oldcode.compareTo(vcode)==0){
+		response.sendRedirect("person.html");
+	}else{
+		
+	}
+}else{
+int mobile_code = (int)((Math.random()*9+1)*100000);
+request.getSession().setAttribute("moblie_code", mobile_code);
+
 String content = new String("您的验证码是：" + mobile_code + "。请不要把验证码泄露给其他人。");
 
 try {
@@ -35,6 +45,7 @@ try {
 
 } catch (IOException e) {
 	e.printStackTrace(System.out);
+}
 }
 
 %>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 定义数据源Bean,使用C3P0数据源实现 -->
+<bean id="dataSource" class="coom.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+	<!-- 指定连接数据库的驱动 -->
+	<property name="driverClass" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
+	<!-- 指定连接数据库的URL -->
+	<property name="jdbcUrl" value="jdbc:sqlserver://localhost:1433;DatabaseName=KHMasterDBTest" />
+	<!-- 指定连接数据库的用户名 -->
+	<property name="username" value="sa" />
+	<!-- 指定连接数据库的密码 -->
+	<property name="password" value="2319!20f" />
+	<!-- 指定连接数据库连接池的最大连接数 -->
+	<property name="maxPoolSize" value="100" />
+	<!-- 指定连接数据库连接池的最小连接数 -->
+	<property name="minPoolSize" value="1" />
+	<!-- 指定连接数据库连接池的初始化连接数 -->
+	<property name="initialPoolSize" value="1" />
+	<!-- 指定连接数据库连接池的连接最大空闲时间 -->
+	<property name="maxIdleTime" value="20" />
+</bean>

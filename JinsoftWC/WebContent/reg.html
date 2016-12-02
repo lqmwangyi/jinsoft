@@ -22,7 +22,7 @@
          	<label class="weui-label">手机号</label>
          </div>
          <div class="weui-cell__bd">
-             <input class="weui-input" type="tel" placeholder="请输入手机号"/>
+             <input class="weui-input" id="mobile" name="mobile" type="tel" placeholder="请输入手机号"/>
          </div>
          <div class="weui-cell__ft">
              <i class="weui-icon-warn"></i>
@@ -33,10 +33,10 @@
 	        <label class="weui-label">验证码</label>
 	    </div>
 	    <div class="weui-cell__bd">
-	        <input class="weui-input" type="number" pattern="[0-9][4]" value="weui input error" placeholder="请输入验证码">
+	        <input class="weui-input" id="vcode" name="vcode" type="number" pattern="[0-9][4]" value="weui input error" placeholder="请输入验证码">
 	    </div>
 	    <div class="weui-cell__ft">
-	        <button class="weui-vcode-btn" id="vcode-btn" onClick="get_mobile_code();">获取验证码</button>
+	        <button class="weui-vcode-btn" id="vcode-btn" disable="disable" onClick="get_mobile_code();">获取验证码</button>
 	    </div>
 	</div>
 	<div class="weui-cell weui-cell_vcode">
@@ -62,7 +62,33 @@
     <p class="weui-footer__text">Copyright ©2016 粤ICP备06034825号</p>
 </div>
 
+<div id="dialogs">
+<!--BEGIN dialog2-->
+<div class="js_dialog" id="iosDialog2" style="display: none;">
+    <div class="weui-mask"></div>
+    <div class="weui-dialog">
+    	<div class="weui-dialog__hd"><strong class="weui-dialog__title">消息提示</strong></div>
+        <div class="weui-dialog__bd" id="msgConent">消息内容</div>
+        <div class="weui-dialog__ft">
+            <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_primary" id="zhidao">知道了</a>
+        </div>
+    </div>
+</div>
+<!--END dialog2-->
+</div>
+
 <script type="text/javascript">
+//提交认证手机信息
+$('#showTooltips').on('click',function(msg){
+	console.log(msg);
+});
+
+//验证错误信息窗口确认按钮
+$('#zhidao').on('click',function(){
+	$('#iosDialog2').fadeOut(100);
+});
+
+//获取验证码
 function get_mobile_code(){
 	$.post('sms.jsp', {mobile:jQuery.trim($('#mobile').val())}, function(msg){
 		RemainTime(msg);
@@ -70,16 +96,16 @@ function get_mobile_code(){
 }
 
 var Account, msgText, iTime=59;
+//执行等待短信发出的休眠时间
 function RemainTime(msg){
+	
 	$(msg).find("msg").each(function(index, item) {
 	    msgText = $(item).text();
 	});
 	
-	
-	console.log(msgText=='提交成功');
 	if(msgText=='提交成功'){
-		//document.getElementById('vcode-btn').disable = true;
-		$('#vcode-btn').attr('class','weui-vcode-btn weui-vcode-btn_disabled'); 
+		$('#vcode-btn').attr('disabled','disabled');
+		$('#vcode-btn').attr('class','weui-btn weui_btn_disabled weui_btn_default');
 		var iSecond,sSecond="",sTime="";
 		if(iTime >= 0){
 			iSecond = parseInt(iTime%60);
@@ -91,13 +117,15 @@ function RemainTime(msg){
 					sSecond = iSecond + "秒";
 				}
 			}
-			sTime=msgText+"("+sSecond+")";
+			/* 以提交反馈内容为显示信息拼接休眠时间 */
+			//sTime=msgText+"("+sSecond+")";
+			sTime="("+sSecond+")"+"之后重新获取";
 			if(iTime==0){
 				clearTimeout(Account);
 				sTime='获取验证码';
 				iTime=59;
-				$('#vcode-btn').attr('class','weui-vcode-btn'); 
-				//document.getElemenById('vcode-btn').disabled = false;
+				$('#vcode-btn').attr('class','weui-vcode-btn');
+				$('#vcode-btn').attr('disabled','');
 			}else{
 				Account = setTimeout("RemainTime()",1000);
 				iTime=iTime-1;
@@ -107,7 +135,8 @@ function RemainTime(msg){
 		}
 		document.getElementById('vcode-btn').textContent = sTime;
 	}else{
-		
+		$('#iosDialog2').fadeIn(200);
+		document.getElementById('msgConent').textContent = msgText;
 	}
 }
 </script>
