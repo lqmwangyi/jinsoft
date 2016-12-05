@@ -90,7 +90,7 @@ $('#zhidao').on('click',function(){
 
 //获取验证码
 function get_mobile_code(){
-	$.post('sms.jsp', {mobile:jQuery.trim($('#mobile').val())}, function(msg){
+	$.post('sendsms.sms?', {mobile:jQuery.trim($('#mobile').val())}, function(msg){
 		RemainTime(msg);
 	});
 }

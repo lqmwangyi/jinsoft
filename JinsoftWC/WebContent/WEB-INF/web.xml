@@ -17,11 +17,11 @@
     <servlet-class>jinsoftms.service.WeChatMain</servlet-class>
     <init-param>
       <param-name>HTTPSURL</param-name>
-      <param-value>https://60d6b1f0.ngrok.io</param-value>
+      <param-value>https://3ae690cb.ngrok.io</param-value>
     </init-param>
     <init-param>
       <param-name>HTTPURL</param-name>
-      <param-value>http://60d6b1f0.ngrok.io</param-value>
+      <param-value>http://3ae690cb.ngrok.io</param-value>
     </init-param>
     <init-param>
       <param-name>Project.name</param-name>
@@ -71,12 +71,24 @@
     <servlet-name>register</servlet-name>
     <servlet-class>jinsoftms.service.register</servlet-class>
     <init-param>
+		<param-name>SMS.path</param-name>
+		<param-value>sendsms</param-value>
+	</init-param>
+    <init-param>
       <param-name>SecurityJDBC.name</param-name>
       <param-value>JINSA</param-value>
+    </init-param>
+    <init-param>
+      <param-name>sms.account</param-name>
+      <param-value>cf_jingsoft</param-value>
+    </init-param>
+    <init-param>
+      <param-name>sms.password</param-name>
+      <param-value>23192319</param-value>
     </init-param>
   </servlet>
   <servlet-mapping>
     <servlet-name>register</servlet-name>
-    <url-pattern>/register</url-pattern>
+    <url-pattern>*.sms</url-pattern>
   </servlet-mapping>
 </web-app>

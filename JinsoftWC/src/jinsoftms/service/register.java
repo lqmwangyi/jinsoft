@@ -23,7 +23,7 @@ import jinsoftms.util.factory.ProcessFactory;
 /**
  * Servlet implementation class register
  */
-public class WeChatBusiness extends HttpServlet {
+public class register extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	/**
 	 * 数据库名称
@@ -78,8 +78,8 @@ public class WeChatBusiness extends HttpServlet {
 			setReponse(response);
 			Map params = null;	
 			
-	    	HttpSession session = getSession(request);
-	    	LoginUser loginUser = getLoginUser(session);
+//	    	HttpSession session = getSession(request);
+//	    	LoginUser loginUser = getLoginUser(session);
 	    	
 	    	String processPath = request.getServletPath().substring(1);
 	    	System.out.println("方法名称路径"+processPath);
@@ -89,7 +89,7 @@ public class WeChatBusiness extends HttpServlet {
 	    	params = getParams(request);
 	    	
 	    	PrintWriter pw = response.getWriter();
-	    	if(bi.process(params, loginUser)){
+	    	if(bi.process(params, null)){
 	    		pw.print(bi.getResultString());
 	    	}
 		} catch (Exception e) {

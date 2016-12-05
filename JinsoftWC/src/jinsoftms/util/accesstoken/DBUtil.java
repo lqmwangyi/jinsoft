@@ -9,6 +9,7 @@ import jinsoftms.database.wechat.AccessToken;
 import jinsoftms.util.RuntimeExceptionUtil;
 
 public class DBUtil {
+	private boolean isUseDoubleQuote = false;
 	private Connection c = null;
 	private Statement stmt = null;
 	
@@ -119,17 +120,19 @@ public class DBUtil {
 			c.setAutoCommit(false);
 			stmt = c.createStatement();
 			
-			String sql = "";
 			if(mp.containsKey("access_token")){
-				sql = "UPDATE AccessToken set access_token ='"+mp.get("access_token")+"' where id=1;";
+				System.out.println("UPDATE access_token");
+				String sql = "UPDATE AccessToken set access_token ='"+mp.get("access_token")+"' where id=1;";
 				stmt.executeUpdate(sql);
 			}
 			if(mp.containsKey("expires_in")){
-				sql = "UPDATE AccessToken set expires_in ='"+mp.get("expires_in")+"' where id=1;";
+				System.out.println("UPDATE expires_in");
+				String sql = "UPDATE AccessToken set expires_in ='"+mp.get("expires_in")+"' where id=1;";
 				stmt.executeUpdate(sql);
 			}
 			if(mp.containsKey("timestamp")){
-				sql = "UPDATE AccessToken set timestamp ='"+mp.get("timestamp")+"' where id=1;";
+				System.out.println("UPDATE timestamp");
+				String sql = "UPDATE AccessToken set timestamp ='"+mp.get("timestamp")+"' where id=1;";
 				stmt.executeUpdate(sql);
 			}
 			c.commit();
@@ -198,5 +201,9 @@ public class DBUtil {
 			throw new RuntimeExceptionUtil(ex);
 		}
 		System.out.println("Alter column successfully");
+	}
+	
+	public boolean getOutStringUseDoubleQuote() {
+		return this.isUseDoubleQuote;
 	}
 }

@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import jinsoftms.AbstractBusiness;
+import jinsoftms.database.khdata.LoginUser;
 import jinsoftms.database.wechat.AccessToken;
 import jinsoftms.util.RuntimeExceptionUtil;
 import jinsoftms.util.accesstoken.DBUtil;
@@ -59,19 +60,21 @@ public class AccessTokenController extends AbstractBusiness {
 	}
 	
 	//保存accesstoken
-	public boolean saveorupdate(AccessToken access_token){
+	public boolean saveorupdate(AccessToken at){
 		try{
 			DBOpention();
 			
-			db = new DBUtil(c,access_token.getAccess_token(),access_token.getExpires_in());
+			db = new DBUtil(c,at.getAccess_token(),at.getExpires_in());
 			
-			AccessToken accesstoken = (AccessToken) db.queryTable("SELECT * FROM AccessToken where id=1;");
-			if(accesstoken.getAccess_token()==null){
+			AccessToken query = (AccessToken) db.queryTable("SELECT * FROM AccessToken where id=1;");
+			if(query.getAccess_token()==null){
 				db.insertTable();
+				System.out.println("insert record seccess!");
 			}else{
 				Map<String, String> mp = new HashMap<String, String>();
-				mp.put("access_token", access_token.getAccess_token());
-				mp.put("expires_in", (access_token.getExpires_in()+""));
+				mp.put("access_token", at.getAccess_token());
+				mp.put("expires_in", (at.getExpires_in()+""));
+				mp.put("timestamp", (System.currentTimeMillis()+""));
 				db.updateTable(mp);
 			}
 		} catch (Exception ex) {
@@ -106,7 +109,13 @@ public class AccessTokenController extends AbstractBusiness {
 			}
 			c=null;
 		}
-    }  
+    }
+
+	public boolean process(Map<String, String> paramMap,
+			LoginUser paramLoginUser) {
+		// TODO Auto-generated method stub
+		return false;
+	}  
 	
 //	public static void main(String[] args) {
 //		Connection c = null;

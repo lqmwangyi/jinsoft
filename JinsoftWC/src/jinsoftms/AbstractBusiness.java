@@ -1,6 +1,8 @@
 package jinsoftms;
 
-public abstract class AbstractBusiness {
+import jinsoftms.handlerprocess.BusinessInterface;
+
+public abstract class AbstractBusiness implements BusinessInterface {
 	
 	protected String resultstr;
 	
