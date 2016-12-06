@@ -32,11 +32,6 @@ public class WechatProcess extends HttpServlet {
 	private boolean isPrint;
 	private boolean isCheckConnectionType;
 	private boolean isCustomOutString;
-	/**
-	 * 短信验证码 账号 密码 密码支持md5加密吗
-	 */
-	private String SMSACCOUNT;
-	private String SMSPASSWORD;
 	private String LoginInforExtractorPath;
 	private String SecurityWXJDBC;
 	private String MainWXWebName;
@@ -44,12 +39,6 @@ public class WechatProcess extends HttpServlet {
 
 	public void init(ServletConfig conf) throws ServletException {
 		super.init(conf);
-		this.SMSACCOUNT = conf.getInitParameter("sms.account");
-		if (this.SMSACCOUNT == null)
-			throw new ServletException("还没有在web.xml文件设置sms.account参数");
-		this.SMSPASSWORD = conf.getInitParameter("sms.password");
-		if (this.SMSPASSWORD == null)
-			throw new ServletException("还没有在web.xml文件设置sms.password参数");
 
 //		String mt = conf.getInitParameter("Validate.CAPTCHA");
 //		if (mt != null) this.ValidateCaptcha = mt.equals("1");
@@ -131,7 +120,7 @@ public class WechatProcess extends HttpServlet {
 					throw new RuntimeExceptionHandler("验证码校验无效，请重新录入");
 			}
 
-			String username = request.getParameter("moblie");
+			String username = request.getParameter("mobile");
 			if ((username == null) || (username.isEmpty()))
 				throw new RuntimeExceptionHandler("没有提交用户手机");
 
