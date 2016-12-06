@@ -310,8 +310,8 @@ public class WeChatMainUtil {
 		String httpsurl = WeChatMain.HTTPSURL;
 		String url = BIND_USER_URL.replace("APPID", AccessTokenThread.APPID).
 				replace("REDIRECT_URI", httpsurl + WeChatMain.ProjectName + "/reg.html")
-				.replace("SCOPE", httpsurl.toString().contains("https")?"snsapi_userinfo":"snsapi_base")
-				.replace("STATE", "0");
+				.replace("SCOPE", "snsapi_userinfo")
+				.replace("STATE", "0"); // httpsurl.toString().contains("https")?"snsapi_userinfo":"snsapi_base"
 		return url;
 	}
 	

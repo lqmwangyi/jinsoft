@@ -80,7 +80,6 @@
 <script type="text/javascript">
 //提交认证手机信息
 $('#showTooltips').on('click',function(msg){
-	console.log(msg);
 	$.post('user.login?',  {mobile:jQuery.trim($('#mobile').val()),vcode:jQuery.trim($('#vcode').val())}, function(xmlHttp){
 		jxmsg(xmlHttp);
 	},'json').error(function(xmlHttp) {
@@ -94,14 +93,18 @@ function jxmsg(xmlHttp){
    		if (xmlHttp.status == 200) {
         	var json = eval('(' + xmlHttp.responseText + ')');
 			console.log(json);
-        	if (!json.success){
+        	if (json.success){
         		var msg=json.msg;
-        		RemainTime(msg);
-        	}else{
-        		RemainTime("服务器错误，返回状态"+xmlHttp.status);
-	       	}
-       }
-	 }
+       			location.replace(msg);
+        	} else {
+    			$('#iosDialog2').fadeIn(200);
+    			document.getElementById('msgConent').textContent = "错误信息："+ json.msg;
+    		}
+        }else{
+	   		$('#iosDialog2').fadeIn(200);
+			document.getElementById('msgConent').textContent = "服务器错误，返回状态"+xmlHttp.status;
+  		}
+ 	}
 }
 
 //验证错误信息窗口确认按钮
@@ -112,54 +115,53 @@ $('#zhidao').on('click',function(){
 //获取验证码
 function get_mobile_code(){
 	$.post('sms.send?',  {mobile:jQuery.trim($('#mobile').val())}, function(msg){
-		RemainTime(msg);
+		var json = eval('(' + msg + ')');
+		msgText = json.msg;
+		if(msgText=='提交成功'){
+			$('#vcode-btn').attr('disabled','disabled');
+			$('#vcode-btn').attr('class','weui-btn weui_btn_disabled weui_btn_default');
+			RemainTime();
+		}else{
+			$('#iosDialog2').fadeIn(200);
+			document.getElementById('msgConent').textContent = msgText;
+		}
+		
 	});
 }
 
 var Account, msgText, iTime=59;
 //执行等待短信发出的休眠时间
-function RemainTime(msg){
-   	var json = eval('(' + msg + ')');
-	msgText = json.msg
-    console.log(msgText);
-	
-	if(msgText=='提交成功'){
-		$('#vcode-btn').attr('disabled','disabled');
-		$('#vcode-btn').attr('class','weui-btn weui_btn_disabled weui_btn_default');
-		var iSecond,sSecond="",sTime="";
-		if(iTime >= 0){
-			iSecond = parseInt(iTime%60);
-			iMinute = parseInt(iTime/60);
-			if(iSecond >= 0){
-				if(iMinute > 0){
-					sSecond = iMinute + "分" + iSecond + "秒";
-				}else{
-					sSecond = iSecond + "秒";
-				}
-			}
-			/* 以提交反馈内容为显示信息拼接休眠时间 */
-			//sTime=msgText+"("+sSecond+")";
-			sTime="("+sSecond+")"+"之后重新获取";
-			if(iTime==0){
-				clearTimeout(Account);
-				sTime='获取验证码';
-				iTime=59;
-				$('#vcode-btn').attr('class','weui-vcode-btn');
-				$('#vcode-btn').attr('disabled','');
+function RemainTime(){
+	var iSecond,sSecond="",sTime="";
+	if(iTime >= 0){
+		iSecond = parseInt(iTime%60);
+		iMinute = parseInt(iTime/60);
+		if(iSecond >= 0){
+			if(iMinute > 0){
+				sSecond = iMinute + "分" + iSecond + "秒";
 			}else{
-				Account = setTimeout("RemainTime()",1000);
-				iTime=iTime-1;
+				sSecond = iSecond + "秒";
 			}
-		}else{
-			sTime='没有倒计时';
 		}
-		document.getElementById('vcode-btn').textContent = sTime;
-	} if(msgText=='person.html'){
-		location.replace(msgText);
+		/* 以提交反馈内容为显示信息拼接休眠时间 */
+		//sTime=msgText+"("+sSecond+")";
+		sTime=""+sSecond+"后重新获取";
+		if(iTime==0){
+			clearTimeout(Account);
+			sTime='获取验证码';
+			iTime=59;
+			$('#vcode-btn').attr('class','weui-vcode-btn');
+			$('#vcode-btn').attr('disabled','');
+		}else{
+			Account = setTimeout("RemainTime()",1000);
+			iTime=iTime-1;
+		}
 	}else{
-		$('#iosDialog2').fadeIn(200);
-		document.getElementById('msgConent').textContent = msgText;
+		sTime='没有倒计时';
 	}
+	document.getElementById('vcode-btn').textContent = sTime;
+	
+	
 }
 </script>
 

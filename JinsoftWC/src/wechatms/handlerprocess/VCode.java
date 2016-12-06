@@ -61,7 +61,7 @@ public class VCode extends HttpServlet {
 			String str = "1234567890";
 			char[] ch = new char[4];
 			Random random = new Random();
-			for (int i = 0; i < 4; ++i) {
+			for (int i = 0; i < 6; ++i) {
 				ch[i] = str.charAt(random.nextInt(str.length()));
 			}
 			vcode = new String(ch);
@@ -132,6 +132,7 @@ public class VCode extends HttpServlet {
 				System.out.println(code);
 				System.out.println(msg);
 				System.out.println(smsid);
+				
 				response.setContentType("text/html;charset=UTF-8");
 				response.setHeader("Pragma", "No-cache");
 		    	response.setHeader("Cache-Control", "no-cache");
