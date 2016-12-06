@@ -14,12 +14,15 @@ public class ProcessFactory {
 	public static BusinessInterface createBusinessLogical(String blClassName) {
 		Class classZZ;
 	    try {
-	    	
+	    	System.out.println(blClassName);
 	    	classZZ = (Class)classMap.get(blClassName);
+	    	System.out.println(classZZ);
 	    	if (classZZ == null) {
 	    		classZZ = Class.forName(blClassName);
+	    		System.out.println(classZZ);
 	    		classMap.put(blClassName, classZZ);
 	    	}
+	    	System.out.println(classZZ);
 	    	return ((BusinessInterface)classZZ.newInstance()); } catch (Exception ex) {
 	    }
 	    return null;

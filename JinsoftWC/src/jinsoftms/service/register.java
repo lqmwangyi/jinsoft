@@ -80,16 +80,20 @@ public class register extends HttpServlet {
 			
 //	    	HttpSession session = getSession(request);
 //	    	LoginUser loginUser = getLoginUser(session);
+			LoginUser loginUser = new LoginUser();
 	    	
 	    	String processPath = request.getServletPath().substring(1);
 	    	System.out.println("方法名称路径"+processPath);
 	    	
-	    	BusinessInterface bi = getBusinessLogical(processPath);
 	    	//获取网络参数
 	    	params = getParams(request);
+	    	BusinessInterface bi = createBusinessLogical(processPath);
+	    	
+	    	boolean isOK = bi.process(params, loginUser);
+	    	System.out.println(isOK);
 	    	
 	    	PrintWriter pw = response.getWriter();
-	    	if(bi.process(params, null)){
+	    	if(isOK){
 	    		pw.print(bi.getResultString());
 	    	}
 		} catch (Exception e) {
@@ -111,7 +115,7 @@ public class register extends HttpServlet {
 	    reponse.setCharacterEncoding("UTF-8");
 	}
 	
-	public BusinessInterface getBusinessLogical(String realClass){
+	public BusinessInterface createBusinessLogical(String realClass){
 	    return ProcessFactory.createBusinessLogical(realClass);
 	}
 	

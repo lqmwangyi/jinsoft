@@ -2,6 +2,7 @@ package sms;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Random;
 
 import jinsoftms.AbstractBusiness;
 import jinsoftms.database.khdata.LoginUser;
@@ -11,6 +12,7 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.log4j.chainsaw.Main;
 import org.dom4j.Document;   
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;   
@@ -171,5 +173,14 @@ public class sendsms extends AbstractBusiness{
 		}	
 	}
 	
-	
+	public static void main(String[] args) {
+		String str = "1234567890";
+		char[] ch = new char[4];
+		Random random = new Random();
+		for (int i = 0; i < 4; ++i) {
+			ch[i] = str.charAt(random.nextInt(str.length()));
+		}
+		String rand = new String(ch);
+		System.out.println(rand);
+	}
 }
