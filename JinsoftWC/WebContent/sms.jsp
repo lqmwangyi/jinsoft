@@ -5,8 +5,8 @@ String account = "cf_jingsoft";
 String password = "23192319";
 String mobile = request.getParameter("mobile");
 String vcode = request.getParameter("vcode");
-if(mobile && vcode){
-	String oldcode = request.getSession().getAttribute("moblie_code");
+if(!mobile.isEmpty() && !vcode.isEmpty()){
+	String oldcode = (String)request.getSession().getAttribute("moblie_code");
 	if(oldcode.compareTo(vcode)==0){
 		response.sendRedirect("person.html");
 	}else{
