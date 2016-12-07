@@ -11,6 +11,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
@@ -55,17 +56,18 @@ public class VCode extends HttpServlet {
 
 	private void process(HttpServletRequest request,
 			HttpServletResponse response) {
-		String vcode = (String) request.getSession().getAttribute(
-				"VCODE_SESSION_KEY");
-		if ((vcode == null) || (vcode.equals(""))) {
+		String vcode = (String) request.getSession().getAttribute("VCODE_SESSION_KEY");
+		HttpSession session =  request.getSession();
+		if ((vcode == null) || (vcode.equals("")) || (session == null)) {
 			String str = "1234567890";
 			char[] ch = new char[4];
 			Random random = new Random();
-			for (int i = 0; i < 6; ++i) {
+			for (int i = 0; i < 4; ++i) {
 				ch[i] = str.charAt(random.nextInt(str.length()));
 			}
 			vcode = new String(ch);
 			request.getSession().setAttribute("VCODE_SESSION_KEY", vcode);
+			request.getSession().setMaxInactiveInterval(300);
 		}
 		if ((vcode != null) && (!(vcode.equals("")))) {
 //			if(!params.containsKey("account")){
@@ -99,7 +101,7 @@ public class VCode extends HttpServlet {
 
 			System.out.println("验证码 "+ vcode);
 			
-		    String content = new String("您的验证码是：" + vcode + "。请不要把验证码泄露给其他人。"); 
+		    String content = new String("验证码是：" + vcode + "，请于5分钟内输入。"); 
 
 		    System.out.println(this.SMSACCOUNT+"## "+this.SMSPASSWORD+ "### "+ mobile);
 			NameValuePair[] data = {//提交短信

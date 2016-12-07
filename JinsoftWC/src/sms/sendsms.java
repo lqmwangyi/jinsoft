@@ -5,18 +5,18 @@ import java.util.Map;
 import java.util.Random;
 
 import jinsoftms.AbstractBusiness;
-import jinsoftms.database.khdata.LoginUser;
 import jinsoftms.util.RuntimeExceptionUtil;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.log4j.chainsaw.Main;
 import org.dom4j.Document;   
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;   
 import org.dom4j.Element;   
+
+import bvpms.handlerProcess.LoginUser;
 
 public class sendsms extends AbstractBusiness{
 	

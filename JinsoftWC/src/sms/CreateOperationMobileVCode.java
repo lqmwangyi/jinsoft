@@ -1,6 +1,6 @@
 package sms;
 
-import jinsoftms.handlerprocess.OperationMoblieVCode;
+import wechatms.handlerprocess.OperationMoblieVCode;
 
 public class CreateOperationMobileVCode implements OperationMoblieVCode{
 	private static int mobile_code = 0;

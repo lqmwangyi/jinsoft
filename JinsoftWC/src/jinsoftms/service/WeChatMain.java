@@ -152,12 +152,13 @@ public class WeChatMain extends HttpServlet {
 	//				text.setContent("你发送的消息是: "+content);
 	//				message = Message.textMessageToXml(text);
 					//从sqlite表中获得
-					String token = accesstokenthread.accessToken().getAccess_token();
-					System.out.println(token);
+					
 					
 					if("创建菜单".equals(content) || "createmenu".equalsIgnoreCase(content)){
 	//					AccessToken accessToken = AccessTokenThread.accessToken();
 	//					System.out.println("sdfa1"+accessToken.getAccess_token());
+						String token = accesstokenthread.accessToken().getAccess_token();
+						System.out.println(token);
 						
 						String menu = JSONObject.fromObject(WeChatMainUtil.initMenu()).toString();
 						//从线程获取的token
@@ -173,6 +174,8 @@ public class WeChatMain extends HttpServlet {
 						message = MessageUtil.initText(fromUserName, toUserName, msg);
 					}else if("删除菜单".equals(content) || "deletemenu".equalsIgnoreCase(content)){
 //						String token = AccessTokenThread.accessToken.getAccess_token();
+						String token = accesstokenthread.accessToken().getAccess_token();
+						System.out.println(token);
 						
 						int result = WeChatMainUtil.deleteMenu(token);
 						String msg = "";
@@ -183,6 +186,8 @@ public class WeChatMain extends HttpServlet {
 						}
 						message = MessageUtil.initText(fromUserName, toUserName, msg);
 					}else  if("查询菜单".equals(content) || "querymenu".equalsIgnoreCase(content)){
+						String token = accesstokenthread.accessToken().getAccess_token();
+						System.out.println(token);
 						
 //						String token = AccessTokenThread.accessToken.getAccess_token();
 						JSONObject jsonObject = WeChatMainUtil.queryMenu(token);

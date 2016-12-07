@@ -22,6 +22,7 @@ import jinsoftms.database.wechat.News;
 import jinsoftms.database.wechat.NewsMessage;
 import jinsoftms.database.wechat.TextMessage;
 import jinsoftms.service.WeChatMain;
+import jinsoftms.thread.AccessTokenThread;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.core.util.QuickWriter;
@@ -46,7 +47,9 @@ public class MessageUtil {
 	public static final String MESSAGE_VIEW = "VIEW";
 	
 	public static final String MESSAGE_SCANCODE = "scancode_push";
-	
+//	获取第三方应用返回用户code地址(用户同意授权，获取code)
+	private static final String BIND_USER_URL = WeChatMain.WCOPENHTTPSURL+"/connect/oauth2/authorize?appid=APPID&redirect_uri=REDIRECT_URI&response_type=code&scope=SCOPE&state=STATE#wechat_redirect";
+
 	/**
 	 * 扩展 xstream，使其支持 CDATA 块
 	 */
@@ -136,6 +139,13 @@ public class MessageUtil {
 		sb.append("欢迎你的关注,请按照菜单提示进行操作:\n\n");
 		sb.append("1.公司介绍\n");
 		sb.append("2.楼盘信息\n\n");
+		sb.append("OAuth2.0网页授权演示\n");
+		String httpsurl = WeChatMain.HTTPSURL;
+		String url = BIND_USER_URL.replace("APPID", AccessTokenThread.APPID).
+				replace("REDIRECT_URI", httpsurl + WeChatMain.ProjectName + "/index.jsp")
+				.replace("SCOPE", "snsapi_userinfo")
+				.replace("STATE", "0");
+		sb.append("<a href=\""+url+"\">点击这里体验</a>\n");
 		sb.append("回复？调出此菜单。");
 		return sb.toString();
 	}

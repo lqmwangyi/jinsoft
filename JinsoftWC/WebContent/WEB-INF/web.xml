@@ -20,11 +20,11 @@
 		<servlet-class>jinsoftms.service.WeChatMain</servlet-class>
 		<init-param>
 			<param-name>HTTPSURL</param-name>
-			<param-value>https://4ae19a97.ngrok.io</param-value>
+			<param-value>https://156d89ae.ngrok.io</param-value>
 		</init-param>
 		<init-param>
 			<param-name>HTTPURL</param-name>
-			<param-value>http://4ae19a97.ngrok.io</param-value>
+			<param-value>http://156d89ae.ngrok.io</param-value>
 		</init-param>
 		<init-param>
 			<param-name>Project.name</param-name>

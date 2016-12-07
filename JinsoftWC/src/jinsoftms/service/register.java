@@ -13,9 +13,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import jinsoftms.database.khdata.LoginUser;
-import jinsoftms.handlerprocess.BusinessInterface;
-import jinsoftms.handlerprocess.DBEntranceInterface;
+import bvpms.handlerProcess.LoginUser;
+import wechatms.entity.DBEntranceInterface;
+import wechatms.handlerprocess.BusinessInterface;
 import jinsoftms.util.RuntimeExceptionUtil;
 import jinsoftms.util.SessionRuntimeExceptionHandler;
 import jinsoftms.util.factory.ProcessFactory;
@@ -78,9 +78,8 @@ public class register extends HttpServlet {
 			setReponse(response);
 			Map params = null;	
 			
-//	    	HttpSession session = getSession(request);
-//	    	LoginUser loginUser = getLoginUser(session);
-			LoginUser loginUser = new LoginUser();
+			HttpSession session = getSession(request);
+	    	LoginUser loginUser = getLoginUser(session);
 	    	
 	    	String processPath = request.getServletPath().substring(1);
 	    	System.out.println("方法名称路径"+processPath);

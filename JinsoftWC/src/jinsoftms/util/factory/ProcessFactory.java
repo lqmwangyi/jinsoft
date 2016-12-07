@@ -2,8 +2,9 @@ package jinsoftms.util.factory;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-import jinsoftms.handlerprocess.BusinessInterface;
-import jinsoftms.handlerprocess.OperationJDBCMapKey;
+import wechatms.handlerprocess.BusinessInterface;
+import wechatms.handlerprocess.OperationJDBCMapKey;
+
 
 public class ProcessFactory {
 	@SuppressWarnings({ "unchecked", "rawtypes" })

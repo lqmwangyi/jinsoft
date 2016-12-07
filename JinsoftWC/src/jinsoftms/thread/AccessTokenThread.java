@@ -1,15 +1,11 @@
 package jinsoftms.thread;
 
-import java.util.Map;
-
-import jinsoftms.AbstractBusiness;
 import jinsoftms.controller.AccessTokenController;
-import jinsoftms.database.khdata.LoginUser;
 import jinsoftms.database.wechat.AccessToken;
 import jinsoftms.util.RuntimeExceptionUtil;
 import jinsoftms.util.WeChatMainUtil;
 
-public class AccessTokenThread extends AbstractBusiness implements Runnable {
+public class AccessTokenThread implements Runnable {
 	public static AccessToken accessToken = null;
 	public static String APPID;
 	public static String APPSECRET;
@@ -85,11 +81,6 @@ public class AccessTokenThread extends AbstractBusiness implements Runnable {
 				throw new RuntimeExceptionUtil(e.getMessage());
 			}
 		}
-	}
-
-	public boolean process(Map<String, String> paramMap,
-			LoginUser paramLoginUser) {
-		return false;
 	}
 
 //	/**

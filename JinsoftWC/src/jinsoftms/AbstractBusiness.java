@@ -1,6 +1,6 @@
 package jinsoftms;
 
-import jinsoftms.handlerprocess.BusinessInterface;
+import wechatms.handlerprocess.BusinessInterface;
 
 public abstract class AbstractBusiness implements BusinessInterface {
 	
@@ -9,5 +9,4 @@ public abstract class AbstractBusiness implements BusinessInterface {
 	public String getResultString() {
 		return resultstr;
 	}
-	
 }

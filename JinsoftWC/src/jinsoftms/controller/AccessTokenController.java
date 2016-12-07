@@ -6,8 +6,8 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
+import bvpms.handlerProcess.LoginUser;
 import jinsoftms.AbstractBusiness;
-import jinsoftms.database.khdata.LoginUser;
 import jinsoftms.database.wechat.AccessToken;
 import jinsoftms.util.RuntimeExceptionUtil;
 import jinsoftms.util.accesstoken.DBUtil;
@@ -113,9 +113,8 @@ public class AccessTokenController extends AbstractBusiness {
 
 	public boolean process(Map<String, String> paramMap,
 			LoginUser paramLoginUser) {
-		// TODO Auto-generated method stub
 		return false;
-	}  
+	}
 	
 //	public static void main(String[] args) {
 //		Connection c = null;
