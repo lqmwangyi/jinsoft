@@ -143,7 +143,7 @@ public class MessageUtil {
 		String httpsurl = WeChatMain.HTTPSURL;
 		String url = BIND_USER_URL.replace("APPID", AccessTokenThread.APPID).
 				replace("REDIRECT_URI", httpsurl + WeChatMain.ProjectName + "/index.jsp")
-				.replace("SCOPE", "snsapi_userinfo")
+				.replace("SCOPE", httpsurl.toString().contains("https")?"snsapi_userinfo":"snsapi_base")
 				.replace("STATE", "0");
 		sb.append("<a href=\""+url+"\">点击这里体验</a>\n");
 		sb.append("回复？调出此菜单。");
